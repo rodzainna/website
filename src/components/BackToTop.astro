@@ -42,7 +42,13 @@
     window.addEventListener('scroll', toggleVisibility, { passive: true });
 
     button.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // An explicit `behavior` overrides CSS scroll-behavior, so the
+      // .reduce-motion rule in global.css can't reach this on its own.
+      const prefersReduced =
+        document.documentElement.classList.contains('reduce-motion') ||
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      window.scrollTo({ top: 0, behavior: prefersReduced ? 'auto' : 'smooth' });
     });
   }
 </script>

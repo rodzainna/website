@@ -19,7 +19,8 @@ const lines: TerminalLine[] = [
 >
   <Header />
   <div class="w-full overflow-x-hidden">
-    <main id="main" class="flex min-h-[70vh] items-center py-16">
+    {/* tabindex="-1" so the skip link actually moves focus here, not just scroll */}
+    <main id="main" tabindex="-1" class="flex min-h-[70vh] items-center py-16">
       <div class="container-page md:px-14">
         <p class="mb-4 font-mono text-xs font-semibold tracking-wider text-muted-foreground">
           // ERROR 404
