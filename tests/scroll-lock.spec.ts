@@ -1,5 +1,12 @@
 import { test, expect } from '@playwright/test';
-import { openFirstSheet, rightEdge, leftEdge, scrollbarWidth } from './helpers';
+import {
+  openFirstSheet,
+  rightEdge,
+  leftEdge,
+  scrollbarWidth,
+  waitUntilStill,
+  waitForScrollToStop,
+} from './helpers';
 
 /**
  * Two invariants must hold at once, and fixing one while breaking the other
@@ -26,7 +33,8 @@ test.describe('scroll lock', () => {
     expect(await leftEdge(page, 'h1')).toBe(closed.h1);
 
     await sheet.press('Escape');
-    await page.waitForTimeout(400);
+    await expect(page.locator('dialog.project-sheet[open]')).toHaveCount(0);
+    await waitUntilStill(page.locator('header'));
 
     expect(await rightEdge(page, 'header')).toBe(closed.header);
     expect(await leftEdge(page, 'h1')).toBe(closed.h1);
@@ -51,7 +59,8 @@ test.describe('scroll lock', () => {
     await page.goto('/');
     // Scroll so back-to-top is rendered in place before it's measured.
     await page.evaluate(() => window.scrollTo(0, 800));
-    await page.waitForTimeout(100);
+    await waitForScrollToStop(page);
+    await waitUntilStill(page.locator('#back-to-top-rail'));
 
     const closed = {
       rail: await rightEdge(page, '#a11y-rail'),
@@ -142,7 +151,7 @@ test.describe('scroll lock', () => {
     // a perfectly correct implementation.
     await page.mouse.move(x, 400);
     await page.mouse.wheel(0, 600);
-    await page.waitForTimeout(150);
+    await waitForScrollToStop(page);
 
     expect(await page.evaluate(() => window.scrollY)).toBe(before);
   });

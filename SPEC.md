@@ -212,7 +212,8 @@ Every invariant on this page has a spec:
 | `contrast.spec.ts` | Every token pairing in the table above, both themes, plus a check on the ratio maths itself |
 | `hover-states.spec.ts` | Every control resolves to teal on hover, in both themes |
 | `footer.spec.ts` | Social hrefs, `rel=noopener`, accessible names, footer on every page |
-| `schema.spec.ts` | `toJsonLd` escaping, `Person` shape, noindex switch, 404 canonical |
+| `schema.spec.ts` | `toJsonLd` escaping, `Person` shape, the noindex pair, 404 canonical |
+| `a11y-rail.spec.ts` | Theme and reduced motion: toggle, persistence, no-flash load, OS preference, JS-driven scroll |
 | `availability-pill.spec.ts` | Text-only pill, teal border and text, rendered in both menus |
 | `no-resume.spec.ts` | No résumé link, asset or `download` attribute in the build |
 
@@ -238,6 +239,23 @@ but not programmatic `scrollTo`, so scroll-lock is asserted with
 `mouse.wheel()`. Asserting against `scrollTo` would fail a correct
 implementation.
 
+**Wait on the condition, never on a duration, and don't retry.** There are no
+`waitForTimeout` calls: waits poll the thing being waited for — the sheet's box
+until it stops moving, `scrollY` until it comes to rest — so they can't rot when
+a transition duration changes in `global.css`. `retries` is `0` for the same
+reason: retries plus sleeps let a genuinely flaky test go green unseen.
+
+**Never reuse a running server.** `reuseExistingServer` is off. When something
+already answers on the port, Playwright skips the whole command — including the
+build — and the suite tests whatever that server happens to hold. This repo has
+lost time to stale servers twice.
+
+**Prove a new test can fail.** Break the implementation, watch it go red, put it
+back. Every guard here has been through that: reverting to `scrollbar-gutter:
+stable` reddens four scroll-lock specs, reverting the secondary hover reddens
+four hover specs, and dropping the `reduce-motion` check in `BackToTop`
+reddens the instant-scroll spec with `Expected 0, Received 1200`.
+
 **A permanent skip is a deleted test.** The compensation assertion needs a
 classic scrollbar. macOS follows the system overlay-scrollbar setting and no
 Chromium flag overrides it — and `ubuntu-latest` reports `0` as well, checked
@@ -253,13 +271,27 @@ red with the 1440-versus-1425 signature, on macOS, where the real scrollbar is
 zero. Do that whenever a test's failure mode isn't obvious; a test never seen
 red is a guess.
 
-## Launch checklist
+## Search indexing
 
-Search engines are blocked deliberately while the site is in progress. To go
-live, flip **both** together:
+**The site is permanently excluded from search engines.** This is a settled
+decision, not a pre-launch state and not an oversight — do not "fix" it, and do
+not flag it in a review.
 
-1. `SITE_NOINDEX` in `src/consts.ts` → `false`
-2. `public/robots.txt` → remove `Disallow: /`
+Two mechanisms enforce it, and they belong together:
 
-Everything else — canonical URLs, Open Graph, Twitter card, JSON-LD `Person`,
-sitemap, 1200×630 social image — is already in place.
+1. `SITE_NOINDEX` in `src/consts.ts` — drives `<meta name="robots">`
+2. `public/robots.txt` — `User-agent: * / Disallow: /`
+
+The site is reached by a link given directly to someone, so discovery through
+search is not wanted. `tests/schema.spec.ts` asserts the meta tag stays
+`noindex, nofollow`, so a change has to be deliberate.
+
+The metadata that remains is the metadata that still does work without
+indexing: **Open Graph and the Twitter card** drive the link preview when the
+URL is pasted into LinkedIn, Slack or iMessage, which is exactly how this site
+gets shared. Canonical URLs and the JSON-LD `Person` cost nothing and are
+correct if the decision ever changes.
+
+`sitemap-index.xml` is the exception — it is generated and linked while
+`robots.txt` disallows everything, so nothing will ever read it. Known and
+accepted; inert rather than harmful.

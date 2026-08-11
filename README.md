@@ -4,8 +4,8 @@ Personal portfolio for **Rodzainna Hamisain**, Senior Full-Stack Developer.
 
 Built with [Astro](https://astro.build) as a static site, deployed on Vercel.
 
-> Search indexing is currently disabled while the site is being finished — see
-> the [launch checklist](./SPEC.md#launch-checklist).
+> The site is permanently excluded from search engines by design — see
+> [Search indexing](./SPEC.md#search-indexing).
 
 ## Stack
 
