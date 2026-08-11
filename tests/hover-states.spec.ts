@@ -43,9 +43,11 @@ test.describe('hover states', () => {
   test.skip(({ isMobile }) => !!isMobile, 'hover: is gated behind @media (hover: hover)');
 
   test('the secondary button hovers to teal, not to foreground', async ({ page }) => {
-    await page.goto('/');
+    // The 404 page carries the only `secondary` button left; the home page's
+    // was the résumé download, removed with the PDF.
+    await page.goto('/does-not-exist', { waitUntil: 'domcontentloaded' });
     const cyan = await tokenColor(page, '--cyan');
-    const button = page.locator('a[download]');
+    const button = page.getByRole('link', { name: 'View projects' });
 
     await expect(button).toBeVisible();
     await expectHoverColor(button, 'color', cyan);
@@ -94,7 +96,7 @@ test.describe('hover states', () => {
   });
 
   test('teal resolves brighter in dark mode, so hovers stay legible', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/does-not-exist', { waitUntil: 'domcontentloaded' });
     const light = await tokenColor(page, '--cyan');
 
     await page.evaluate(() => document.documentElement.classList.add('dark'));
@@ -103,7 +105,7 @@ test.describe('hover states', () => {
     // Same token, different value per theme — a hardcoded hex would break this.
     expect(dark).not.toBe(light);
 
-    const button = page.locator('a[download]');
+    const button = page.getByRole('link', { name: 'View projects' });
     await expectHoverColor(button, 'color', dark);
   });
 

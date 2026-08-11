@@ -23,6 +23,12 @@ pnpm-debug.log*
 .env
 .env.production
 
+# Résumé PDFs are never committed — see SPEC.md § Résumé. The file carried
+# contact details and lived in git history, where deleting it later would not
+# have removed it. Keep any local copy outside the repo.
+public/resume*.pdf
+*resume*.pdf
+
 # macOS-specific files
 .DS_Store
 
