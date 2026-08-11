@@ -1,0 +1,28 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Hero from '@/components/Hero.astro';
+import Skills from '@/components/Skills.astro';
+import Projects from '@/components/Projects.astro';
+import Experience from '@/components/Experience.astro';
+import Contact from '@/components/Contact.astro';
+import Footer from '@/components/Footer.astro';
+import BackToTop from '@/components/BackToTop.astro';
+import AccessibilityRail from '@/components/AccessibilityRail.astro';
+---
+
+<BaseLayout>
+	<Header />
+	<div class="w-full overflow-x-hidden">
+		<main id="main">
+			<Hero />
+			<Skills />
+			<Projects />
+			<Experience />
+			<Contact />
+		</main>
+		<Footer />
+	</div>
+	<BackToTop />
+	<AccessibilityRail />
+</BaseLayout>
