@@ -1,0 +1,29 @@
+---
+import { EXPERIENCE } from '@/consts';
+---
+
+<section id="experience" class="border-b border-border py-16">
+  <div class="container-page md:px-14">
+    <h2 class="mb-8 font-display text-3xl font-bold">Experience</h2>
+    <div class="flex flex-col">
+      {
+        EXPERIENCE.map((job) => (
+          <div class="grid grid-cols-1 gap-3 border-t border-border py-6 md:grid-cols-[150px_1fr] md:gap-6">
+            <div class="font-mono text-xs font-medium text-muted-foreground uppercase md:pt-2">
+              {job.dates}
+            </div>
+            <div>
+              <h3 class="mb-0.5 font-display text-lg font-bold">{job.role}</h3>
+              <p class="mb-2.5 text-sm font-medium text-muted-foreground">{job.company}</p>
+              <ul class="list-disc pl-5 text-sm leading-relaxed text-muted-foreground">
+                {job.achievements.map((a) => (
+                  <li>{a}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

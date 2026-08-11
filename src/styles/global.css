@@ -1,0 +1,207 @@
+@import 'tailwindcss';
+
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/jetbrains-mono';
+
+@custom-variant dark (&:is(.dark *));
+
+@utility container-page {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 1120px;
+  padding-inline: 1.875rem; /* 30px on mobile; override with md:px-14 to match desktop gutter */
+}
+
+@theme {
+  --font-display: 'Inter Variable', sans-serif;
+  --font-sans: 'Inter Variable', sans-serif;
+  --font-mono: 'JetBrains Mono Variable', monospace;
+}
+
+@theme inline {
+  --font-heading: var(--font-display);
+  --color-ring: var(--ring);
+  --color-border: var(--border);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --color-cyan: var(--cyan);
+  --color-cyan-hover: var(--cyan-hover);
+  --color-cyan-on-dark: var(--cyan-on-dark);
+  --color-cyan-on-dark-hover: var(--cyan-on-dark-hover);
+  --color-surface-on-dark: var(--surface-on-dark);
+  --color-foreground-on-dark: var(--foreground-on-dark);
+  --color-muted-foreground-on-dark: var(--muted-foreground-on-dark);
+  --color-border-on-dark: var(--border-on-dark);
+  --color-success: var(--success);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --primary: #0a0a0a;
+  --primary-foreground: #ffffff;
+  --muted: #f5f5f5;
+  --muted-foreground: #6b7280;
+  --border: #e5e5e5;
+  --ring: #155e63;
+  /* Brand teal — same value as the app icon, from BRANDING.md "Teal (default)":
+     oklch(0.442 0.068 201.9). Accent-on-light. */
+  --cyan: #155e63;
+  --cyan-hover: #0f484c; /* oklch(0.368 0.056 202.0) */
+  /* Fixed brightened teal for surfaces that are dark in BOTH themes
+     (hero/404 terminals, contact card). oklch(0.722 0.088 201.9). */
+  --cyan-on-dark: #5ab6bd;
+  --cyan-on-dark-hover: #49949a; /* oklch(0.622 0.075 201.9) */
+  /* The rest of the "on dark" set. These never flip with the theme, because
+     the surfaces using them (terminals, contact card) are dark in both. */
+  --surface-on-dark: #0a0a0a;
+  --foreground-on-dark: #ffffff;
+  --muted-foreground-on-dark: #a3a3a3;
+  --border-on-dark: #404040;
+  /* Success semantic from BRANDING.md's "standard" set (shared by the Teal
+     theme). Teal-family green — hue 186 against the primary's 202. */
+  --success: #0f766e; /* oklch(0.511 0.086 186.4) */
+  --radius: 0.5rem;
+  /* Single source of truth for the skill-chip height. The chip and the row
+     label opposite it both read this, so their baselines can't drift apart. */
+  --chip-height: 2.25rem;
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ffffff;
+  --primary: #ffffff;
+  --primary-foreground: #0a0a0a;
+  --muted: #262626;
+  --muted-foreground: #a3a3a3;
+  --border: #404040;
+  --ring: #49949a;
+  /* Brightened per BRANDING.md's dark derivation (+~0.28 L, same hue) — the
+     light teal only reaches 2.65:1 on this canvas. */
+  --cyan: #5ab6bd;
+  --cyan-hover: #49949a;
+  --success: #66b2a9; /* oklch(0.711 0.077 186.4) */
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  /* Every in-page anchor target clears the sticky header, so individual
+     sections don't each have to remember a scroll-mt utility. */
+  section[id] {
+    scroll-margin-top: 6rem;
+  }
+  /* One focus ring for every interactive element. Previously this was a 50%
+     alpha outline colour with no width, so each element fell back to whatever
+     the UA drew (1px in most places, 3px on buttons). */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  /* Skip-link targets take focus programmatically but aren't interactive and
+     aren't in the tab order — a ring here would frame the whole page. The
+     next Tab lands on a real control, which still shows one. */
+  [tabindex='-1']:focus-visible {
+    outline: none;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+  button:not(:disabled) {
+    @apply cursor-pointer;
+  }
+}
+
+/* Right-hand slide-over built on <dialog>. showModal() gives us the focus
+   trap, Esc-to-close, inert background and top-layer stacking for free. */
+.project-sheet {
+  margin: 0 0 0 auto;
+  height: 100dvh;
+  max-height: 100dvh;
+  width: 100%;
+  max-width: 36rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  overflow: hidden;
+  transform: translateX(100%);
+  transition:
+    transform 0.3s ease,
+    overlay 0.3s allow-discrete,
+    display 0.3s allow-discrete;
+}
+
+.project-sheet[open] {
+  transform: translateX(0);
+}
+
+@starting-style {
+  .project-sheet[open] {
+    transform: translateX(100%);
+  }
+}
+
+.project-sheet::backdrop {
+  background: rgb(0 0 0 / 0.5);
+  opacity: 0;
+  transition:
+    opacity 0.3s ease,
+    overlay 0.3s allow-discrete,
+    display 0.3s allow-discrete;
+}
+
+.project-sheet[open]::backdrop {
+  opacity: 1;
+}
+
+@starting-style {
+  .project-sheet[open]::backdrop {
+    opacity: 0;
+  }
+}
+
+/* Stop the page behind the sheet from scrolling. */
+html:has(.project-sheet[open]) {
+  overflow: hidden;
+}
+
+/* Prose rendered from each project's MDX body. */
+.project-sheet-prose {
+  @apply space-y-3 text-sm leading-relaxed text-muted-foreground;
+}
+.project-sheet-prose :is(h2) {
+  @apply mt-1 mb-1 font-display text-lg font-bold text-foreground;
+}
+.project-sheet-prose :is(p) {
+  @apply mb-3;
+}
+.project-sheet-prose :is(li) {
+  @apply mb-1 ml-4 list-disc;
+}
+.project-sheet-prose :is(a) {
+  @apply text-cyan;
+}
+
+:root.reduce-motion,
+:root.reduce-motion * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}

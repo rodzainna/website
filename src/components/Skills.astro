@@ -1,0 +1,35 @@
+---
+import { SKILL_GROUPS } from '@/consts';
+import Tag from '@/components/Tag.astro';
+---
+
+<section id="skills" class="border-b border-border pt-8 pb-14">
+  <div class="container-page md:px-14">
+    <h2 class="mb-5 font-mono text-xs font-semibold tracking-wider text-muted-foreground">
+      // SKILLS &amp; STACK
+    </h2>
+    <div class="flex flex-col">
+      {
+        SKILL_GROUPS.map((group, i) => (
+          <div
+            class:list={[
+              'grid grid-cols-1 gap-2 py-3 md:grid-cols-[200px_1fr] md:gap-6',
+              i > 0 ? 'border-t border-border' : '',
+            ]}
+          >
+            <div class="flex min-h-[var(--chip-height)] items-center">
+              <p class="font-mono text-xs font-semibold uppercase tracking-wider text-cyan">
+                {group.label}
+              </p>
+            </div>
+            <div class="flex flex-wrap items-start gap-2.5">
+              {group.items.map((skill) => (
+                <Tag size="md">{skill}</Tag>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

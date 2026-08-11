@@ -1,0 +1,47 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { SITE_TITLE } from '@/consts';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import Button from '@/components/Button.astro';
+import Terminal, { type TerminalLine } from '@/components/Terminal.astro';
+import AccessibilityRail from '@/components/AccessibilityRail.astro';
+
+const lines: TerminalLine[] = [
+  { prompt: `$ cd ${Astro.url.pathname}`, output: 'cd: no such file or directory' },
+  { prompt: '$ cd ~', output: '✓ ok' },
+];
+---
+
+<BaseLayout
+  title={`Page not found — ${SITE_TITLE}`}
+  description="The page you're looking for doesn't exist."
+>
+  <Header />
+  <div class="w-full overflow-x-hidden">
+    {/* tabindex="-1" so the skip link actually moves focus here, not just scroll */}
+    <main id="main" tabindex="-1" class="flex min-h-[70vh] items-center py-16">
+      <div class="container-page md:px-14">
+        <p class="mb-4 font-mono text-xs font-semibold tracking-wider text-muted-foreground">
+          // ERROR 404
+        </p>
+        <h1 class="mb-4 font-display text-3xl leading-none font-bold md:text-4xl lg:text-5xl">
+          Page not found
+        </h1>
+        <p class="mb-7 max-w-[50ch] text-base leading-relaxed text-muted-foreground">
+          The page you're looking for doesn't exist, or it moved somewhere else. Head back home
+          and pick up from there.
+        </p>
+
+        <Terminal lines={lines} class="mb-8 max-w-md" />
+
+        <div class="flex flex-wrap gap-3">
+          <Button href="/">Back home</Button>
+          <Button variant="secondary" href="/#projects">View projects</Button>
+        </div>
+      </div>
+    </main>
+    <Footer />
+  </div>
+  <AccessibilityRail />
+</BaseLayout>

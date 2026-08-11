@@ -1,0 +1,13 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@/lib/utils';
+import { tagVariants, type TagVariants } from '@/lib/variants';
+
+type Props = HTMLAttributes<'span'> & TagVariants;
+
+const { size, interactive, class: className, ...rest } = Astro.props;
+---
+
+<span class={cn(tagVariants({ size, interactive }), className)} {...rest}>
+  <slot />
+</span>
