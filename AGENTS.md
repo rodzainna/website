@@ -26,6 +26,12 @@ wrong, restart the server and hard-reload before debugging the code. `astro dev 
 can also lose track of a running process — `lsof -nP -iTCP:4321 -sTCP:LISTEN` is
 authoritative.
 
+**Always restart after installing or removing a dependency.** pnpm rewrites the
+paths under `node_modules/.pnpm`, and a server started before that keeps stale
+module resolution. It presents as `/_image` returning 500 with `MissingSharp` and
+every project image broken, which looks like a code bug and isn't — `node -e
+"require('sharp')"` will succeed the whole time.
+
 ## Conventions
 
 - **Styles** live in `src/styles/global.css`. Colours come from CSS custom
@@ -44,10 +50,17 @@ authoritative.
   viewport, measuring the quantity the user sees — not the one that's easiest
   to reach. See SPEC.md § Verification.
 
-## CI
+## CI and tests
 
-`pnpm check` and `pnpm build` run on every pull request. `pnpm check` fails on
-hints as well as errors, so deprecations get fixed while they're one-liners.
+`pnpm check`, `pnpm build` and `pnpm test` run on every pull request.
+`pnpm check` fails on hints as well as errors, so deprecations get fixed while
+they're one-liners.
+
+Tests are Playwright in `tests/`, run against the built output at desktop and
+mobile viewports. Before changing scroll locking, text scaling, the nav or the
+colour tokens, read SPEC.md § Verification — it records the specific mistakes
+these specs exist to prevent (asserting on painted rather than computed values,
+bypassing the real trigger, and passing vacuously when a scrollbar is overlay).
 
 ## Documentation
 

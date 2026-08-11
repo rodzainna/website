@@ -80,7 +80,9 @@ because in light mode those resolve to dark-on-dark. They get a fixed set that
 never flips. Getting this wrong is how you end up with 2.6:1 text.
 
 **Contrast floor: 4.5:1** for every foreground/background pairing, including the
-`*-on-dark` set.
+`*-on-dark` set. Enforced by `tests/contrast.spec.ts` in both themes — it caught
+`--muted-foreground` on `--muted` sitting at 4.43:1 behind the project status
+badge, which is why that token is a shade darker than Tailwind's gray-500.
 
 **Shared treatments are defined once.** `src/lib/variants.ts` holds the button
 and tag variants (CVA); `.eyebrow`, `.page-prose` and `.container-page` are
@@ -153,28 +155,60 @@ rail) and the reader (the no-flash loader in `BaseLayout`), so a hand-edited
 
 ## Verification
 
-CI runs `pnpm check` (fails on hints, not just errors) and `pnpm build` on every
-pull request. Neither catches rendered-layout regressions, so the invariants
-above are checked by measurement, in a browser, at a real viewport.
+CI runs `pnpm check` (fails on hints, not just errors), `pnpm build` and
+`pnpm test` on every pull request.
 
-The rule that both scroll-lock bugs violated: **measure the quantity the user
-sees.** The page-shift fix was verified with precise before/after numbers for
-the header and heading positions, and shipped with a visible strip beside the
-panel, because the panel's own edge was never measured. Precise measurement of
-the wrong quantity reads as more certain than no measurement at all.
+Tests are Playwright, in `tests/`, against the **built** output rather than the
+dev server — the dev server can serve stale CSS, and `dist/` is what ships. Two
+projects run every spec: `desktop` at 1440×900 and `mobile` on a Pixel 5.
 
-For a scroll-lock change that means, at minimum:
+Every invariant on this page has a spec:
 
-```
-window.innerWidth
-header.getBoundingClientRect().right      // page didn't shift
-dialog.getBoundingClientRect().right      // panel reaches the edge
-#a11y-rail / #back-to-top-rail .right     // pinned elements held
-```
+| Spec | Covers |
+| --- | --- |
+| `scroll-lock.spec.ts` | Both invariants above, the compensation arithmetic, and that the background can't be scrolled |
+| `text-scaling.spec.ts` | Computed font-size changes, clamping, float drift, persistence, reset |
+| `dialog.spec.ts` | Open, Esc, backdrop, close button, `aria-expanded`, labelling, focus containment and restoration |
+| `nav.spec.ts` | Both menus agree, targets exist, links absolute, mobile open/dismiss/Escape |
+| `contrast.spec.ts` | Every token pairing in the table above, both themes, plus a check on the ratio maths itself |
+| `schema.spec.ts` | `toJsonLd` escaping, `Person` shape, noindex switch, 404 canonical |
 
-taken closed → open → closed, driven through the real trigger rather than by
-calling `showModal()` directly, and repeated at a mobile viewport where the
-measurement should be `0px` and every rule inert.
+### Rules these tests encode
+
+**Measure the quantity the user sees.** Both scroll-lock bugs violated this.
+The page-shift fix shipped with precise before/after numbers for the header and
+heading positions, and a visible strip beside the panel, because the panel's own
+edge was never measured. Precise measurement of the wrong quantity reads as more
+certain than no measurement at all.
+
+**Assert on computed values, not painted ones.** `text-scaling.spec.ts` asserts
+`getComputedStyle(...).fontSize`, never a bounding box. A bounding-box assertion
+would have passed against the broken `zoom` implementation, because Chrome
+scales `getBoundingClientRect` by the zoom while computed font-size stays put.
+
+**Drive the real trigger.** Sheets are opened by clicking the card, not by
+calling `showModal()` — the trigger sets `--scrollbar-width`, so bypassing it
+tests a state the product never reaches.
+
+**Use real input for user actions.** `overflow: hidden` blocks user scrolling
+but not programmatic `scrollTo`, so scroll-lock is asserted with
+`mouse.wheel()`. Asserting against `scrollTo` would fail a correct
+implementation.
+
+**A permanent skip is a deleted test.** The compensation assertion needs a
+classic scrollbar. macOS follows the system overlay-scrollbar setting and no
+Chromium flag overrides it — and `ubuntu-latest` reports `0` as well, checked
+against a real CI run rather than assumed. So a spec that waits for a genuine
+classic scrollbar never executes anywhere, and skipping is only a tidier way of
+not testing.
+
+It is split instead: one spec asserts the measurement (`--scrollbar-width`
+equals `innerWidth - clientWidth`, which holds at `0` too), and one forces the
+value to `15px` and asserts what the stylesheet does with it. Verified to fail
+by reverting the implementation to `scrollbar-gutter: stable` — four specs go
+red with the 1440-versus-1425 signature, on macOS, where the real scrollbar is
+zero. Do that whenever a test's failure mode isn't obvious; a test never seen
+red is a guess.
 
 ## Launch checklist
 
