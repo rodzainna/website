@@ -1,0 +1,20 @@
+---
+import { cn } from '@/lib/utils';
+
+type Props = {
+  /** Callers supply the display mode — `hidden md:flex` or `mt-1 flex`. */
+  class?: string;
+};
+
+const { class: className } = Astro.props;
+---
+
+<span
+  class={cn(
+    'items-center gap-2 rounded-lg border border-border px-3 py-1.5 font-mono text-xs font-medium text-cyan',
+    className
+  )}
+>
+  <span class="inline-block size-2 rounded-full bg-success"></span>
+  AVAILABLE
+</span>

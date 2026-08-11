@@ -40,6 +40,23 @@ export const FONT_SCALE_MIN = 0.85;
 export const FONT_SCALE_MAX = 1.4;
 export const FONT_SCALE_STEP = 0.1;
 
+export type NavLink = {
+  href: string;
+  label: string;
+};
+
+/**
+ * Rendered twice — the desktop bar and the mobile menu — from this one list,
+ * so the two can't drift. Absolute `/#id` rather than `#id` so the links also
+ * work from /privacy and /404, where the sections don't exist.
+ */
+export const NAV_LINKS: NavLink[] = [
+  { href: '/#projects', label: 'Projects' },
+  { href: '/#skills', label: 'Skills' },
+  { href: '/#experience', label: 'Experience' },
+  { href: '/#contact', label: 'Contact' },
+];
+
 export const SOCIALS = {
   github: 'https://github.com/rodzainna',
   linkedin: 'https://www.linkedin.com/in/rodzainnahamisain',
