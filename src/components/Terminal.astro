@@ -1,0 +1,40 @@
+---
+import { cn } from '@/lib/utils';
+
+export type TerminalLine = {
+  prompt: string;
+  output: string;
+};
+
+type Props = {
+  lines: TerminalLine[];
+  title?: string;
+  class?: string;
+};
+
+const { lines, title = 'zsh', class: className } = Astro.props;
+---
+
+<div
+  class={cn(
+    'overflow-hidden rounded-lg border border-border bg-surface-on-dark shadow-lg',
+    className
+  )}
+>
+  <div class="flex items-center gap-1.5 border-b border-border-on-dark px-4 py-3">
+    <span class="size-2.5 rounded-full bg-border-on-dark"></span>
+    <span class="size-2.5 rounded-full bg-border-on-dark"></span>
+    <span class="size-2.5 rounded-full bg-border-on-dark"></span>
+    <span class="ml-2 font-mono text-xs text-muted-foreground-on-dark">{title}</span>
+  </div>
+  <div class="space-y-3 px-5 py-5 font-mono text-xs leading-relaxed">
+    {
+      lines.map((line) => (
+        <div>
+          <p class="text-cyan-on-dark">{line.prompt}</p>
+          <p class="text-foreground-on-dark">{line.output}</p>
+        </div>
+      ))
+    }
+  </div>
+</div>

@@ -1,0 +1,204 @@
+---
+import RailButton from '@/components/RailButton.astro';
+
+/* Shared attrs for every 18px stroke icon in the rail. */
+const icon = {
+  xmlns: 'http://www.w3.org/2000/svg',
+  width: '18',
+  height: '18',
+  viewBox: '0 0 24 24',
+  fill: 'none',
+  stroke: 'currentColor',
+  'stroke-width': '2',
+  'stroke-linecap': 'round',
+  'stroke-linejoin': 'round',
+} as const;
+---
+
+<div
+  id="a11y-rail"
+  class="fixed right-4 bottom-20 z-30 flex flex-col-reverse items-end gap-2 sm:right-6 sm:top-1/2 sm:bottom-auto sm:flex-col sm:-translate-y-1/2"
+>
+  <button
+    id="a11y-toggle"
+    type="button"
+    aria-label="Open accessibility settings"
+    aria-expanded="false"
+    aria-controls="a11y-panel"
+    class="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-foreground shadow-sm transition-colors hover:border-foreground sm:hidden"
+  >
+    <svg class="a11y-icon-open" {...icon}>
+      <line x1="4" y1="6" x2="20" y2="6"></line>
+      <circle cx="15" cy="6" r="2" fill="currentColor" stroke="none"></circle>
+      <line x1="4" y1="12" x2="20" y2="12"></line>
+      <circle cx="9" cy="12" r="2" fill="currentColor" stroke="none"></circle>
+      <line x1="4" y1="18" x2="20" y2="18"></line>
+      <circle cx="17" cy="18" r="2" fill="currentColor" stroke="none"></circle>
+    </svg>
+    <svg class="a11y-icon-close hidden" {...icon}>
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  </button>
+
+  <div id="a11y-panel" class="hidden flex-col gap-2 data-[open=true]:flex sm:flex" data-open="false">
+    {/* Each icon shows the mode the button switches TO. Driven purely by the
+        `.dark` class so there's no first-paint flash of the wrong icon. */}
+    <RailButton id="a11y-theme" label="Switch to dark mode">
+      <svg class="a11y-icon-sun hidden dark:block" {...icon}>
+        <circle cx="12" cy="12" r="4"></circle>
+        <path
+          d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"
+        ></path>
+      </svg>
+      <svg class="a11y-icon-moon dark:hidden" {...icon}>
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </RailButton>
+
+    <RailButton id="a11y-font-inc" label="Increase text size">
+      {/* lucide: zoom-in */}
+      <svg {...icon}>
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" x2="16.65" y1="21" y2="16.65"></line>
+        <line x1="11" x2="11" y1="8" y2="14"></line>
+        <line x1="8" x2="14" y1="11" y2="11"></line>
+      </svg>
+    </RailButton>
+
+    <RailButton id="a11y-font-dec" label="Decrease text size">
+      {/* lucide: zoom-out */}
+      <svg {...icon}>
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" x2="16.65" y1="21" y2="16.65"></line>
+        <line x1="8" x2="14" y1="11" y2="11"></line>
+      </svg>
+    </RailButton>
+
+    <RailButton id="a11y-motion" label="Reduce motion" pressed={false}>
+      <svg {...icon}>
+        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+      </svg>
+    </RailButton>
+
+    <RailButton id="a11y-reset" label="Reset accessibility settings">
+      {/* lucide: rotate-ccw */}
+      <svg {...icon}>
+        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+        <path d="M3 3v5h5"></path>
+      </svg>
+    </RailButton>
+  </div>
+</div>
+
+<script>
+  import { FONT_SCALE_MIN, FONT_SCALE_MAX, FONT_SCALE_STEP } from '@/consts';
+
+  const root = document.documentElement;
+  const THEME_KEY = 'theme';
+  const FONT_KEY = 'a11y-font-scale';
+  const MOTION_KEY = 'a11y-reduce-motion';
+
+  const toggleButton = document.getElementById('a11y-toggle');
+  const panel = document.getElementById('a11y-panel');
+  const toggleOpenIcon = toggleButton?.querySelector('.a11y-icon-open');
+  const toggleCloseIcon = toggleButton?.querySelector('.a11y-icon-close');
+
+  function syncToggleIcon(isOpen: boolean) {
+    toggleOpenIcon?.classList.toggle('hidden', isOpen);
+    toggleCloseIcon?.classList.toggle('hidden', !isOpen);
+    toggleButton?.setAttribute(
+      'aria-label',
+      isOpen ? 'Close accessibility settings' : 'Open accessibility settings'
+    );
+  }
+
+  const rail = document.getElementById('a11y-rail');
+
+  function setPanelOpen(isOpen: boolean) {
+    panel?.setAttribute('data-open', String(isOpen));
+    toggleButton?.setAttribute('aria-expanded', String(isOpen));
+    syncToggleIcon(isOpen);
+  }
+
+  toggleButton?.addEventListener('click', () =>
+    setPanelOpen(panel?.dataset.open !== 'true')
+  );
+
+  // The panel is a mobile-only popup (CSS forces it open from `sm` up), so it
+  // should be dismissible the same way any popup is.
+  document.addEventListener('click', (event) => {
+    if (panel?.dataset.open !== 'true') return;
+    if (!rail?.contains(event.target as Node)) setPanelOpen(false);
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && panel?.dataset.open === 'true') {
+      setPanelOpen(false);
+      toggleButton?.focus();
+    }
+  });
+
+  const themeButton = document.getElementById('a11y-theme');
+  const themeTip = document.getElementById('a11y-theme-tip');
+  const incButton = document.getElementById('a11y-font-inc');
+  const decButton = document.getElementById('a11y-font-dec');
+  const motionButton = document.getElementById('a11y-motion');
+  const resetButton = document.getElementById('a11y-reset');
+
+  /** The icons swap via CSS; only the accessible name needs updating here. */
+  function syncThemeLabel() {
+    const label = root.classList.contains('dark')
+      ? 'Switch to light mode'
+      : 'Switch to dark mode';
+    themeButton?.setAttribute('aria-label', label);
+    if (themeTip) themeTip.textContent = label;
+  }
+
+  function syncMotionButton() {
+    const active = root.classList.contains('reduce-motion');
+    motionButton?.setAttribute('aria-pressed', String(active));
+  }
+
+  function getFontScale() {
+    return parseFloat(root.style.zoom || '1');
+  }
+
+  function setFontScale(scale: number) {
+    const clamped = Math.min(FONT_SCALE_MAX, Math.max(FONT_SCALE_MIN, scale));
+    root.style.zoom = String(clamped);
+    localStorage.setItem(FONT_KEY, String(clamped));
+  }
+
+  syncThemeLabel();
+  syncMotionButton();
+
+  themeButton?.addEventListener('click', () => {
+    const isDark = root.classList.toggle('dark');
+    localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light');
+    syncThemeLabel();
+  });
+
+  incButton?.addEventListener('click', () => setFontScale(getFontScale() + FONT_SCALE_STEP));
+  decButton?.addEventListener('click', () => setFontScale(getFontScale() - FONT_SCALE_STEP));
+
+  motionButton?.addEventListener('click', () => {
+    const active = root.classList.toggle('reduce-motion');
+    localStorage.setItem(MOTION_KEY, String(active));
+    syncMotionButton();
+  });
+
+  resetButton?.addEventListener('click', () => {
+    localStorage.removeItem(THEME_KEY);
+    localStorage.removeItem(FONT_KEY);
+    localStorage.removeItem(MOTION_KEY);
+
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    root.classList.toggle('dark', prefersDark);
+    root.style.zoom = '1';
+    root.classList.remove('reduce-motion');
+
+    syncThemeLabel();
+    syncMotionButton();
+  });
+</script>

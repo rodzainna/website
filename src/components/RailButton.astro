@@ -1,0 +1,29 @@
+---
+type Props = {
+  id: string;
+  /** Doubles as the accessible name and the hover/focus tooltip. */
+  label: string;
+  /** Set for toggle buttons so assistive tech reports on/off state. */
+  pressed?: boolean;
+};
+
+const { id, label, pressed } = Astro.props;
+---
+
+<div class="group relative">
+  <span
+    id={`${id}-tip`}
+    class="pointer-events-none absolute top-1/2 right-full mr-2 -translate-y-1/2 rounded-md bg-foreground px-2 py-1 font-mono text-xs font-medium whitespace-nowrap text-background opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
+  >
+    {label}
+  </span>
+  <button
+    id={id}
+    type="button"
+    aria-label={label}
+    aria-pressed={pressed}
+    class="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-foreground shadow-sm transition-colors hover:border-foreground aria-pressed:bg-muted aria-pressed:text-cyan"
+  >
+    <slot />
+  </button>
+</div>

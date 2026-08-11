@@ -1,0 +1,75 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import Tag from '@/components/Tag.astro';
+
+type Props = {
+  project: CollectionEntry<'projects'>;
+  /** id of the <dialog> this card opens */
+  sheetId: string;
+};
+
+const { project, sheetId } = Astro.props;
+const { title, kicker, description, tags, cover, coverFit, status } = project.data;
+
+const coverClass = coverFit === 'contain' ? 'object-contain p-6' : 'object-cover object-top';
+---
+
+<article class="group relative flex flex-col gap-2 bg-background p-5">
+  {/* Content is inert so the full-bleed trigger button below owns every click. */}
+  <div class="pointer-events-none relative z-10 flex flex-1 flex-col gap-2">
+    <div
+      class="mb-2 flex aspect-video w-full items-center justify-center overflow-hidden rounded-lg border border-border bg-muted"
+    >
+      {
+        cover ? (
+          <Image
+            src={cover}
+            alt={`${title} screenshot`}
+            class:list={['h-full w-full', coverClass]}
+          />
+        ) : (
+          <span class="font-mono text-xs font-medium text-muted-foreground">{kicker}</span>
+        )
+      }
+    </div>
+
+    <p class="font-mono text-xs font-semibold tracking-wider text-cyan">{kicker}</p>
+
+    <h3 class="mt-0.5 flex items-center gap-2 font-display text-lg font-bold">
+      {title}
+      {
+        status && (
+          <span class="rounded-md bg-muted px-1.5 py-0.5 font-mono text-xs font-medium tracking-wide text-muted-foreground uppercase">
+            {status}
+          </span>
+        )
+      }
+    </h3>
+
+    <p class="text-sm leading-relaxed text-muted-foreground">{description}</p>
+
+    <div class="mt-2 flex flex-wrap gap-2">
+      {tags.map((tag: string) => <Tag>{tag}</Tag>)}
+    </div>
+
+    <span
+      class="mt-2 self-start font-mono text-xs font-semibold tracking-wider text-cyan uppercase"
+    >
+      View details{' '}
+      <span
+        class="inline-block transition-transform duration-200 ease-out group-hover:translate-x-1"
+        aria-hidden="true">→</span
+      >
+    </span>
+  </div>
+
+  <button
+    type="button"
+    class="absolute inset-0 z-0 transition-colors hover:bg-muted"
+    aria-label={`View ${title} details`}
+    aria-haspopup="dialog"
+    aria-expanded="false"
+    aria-controls={sheetId}
+    data-sheet-open={sheetId}></button>
+</article>
