@@ -25,7 +25,7 @@ integration installed. All the JavaScript on the home page, uncompressed:
 | | |
 | --- | --- |
 | Astro prefetch runtime (`_astro/page.*.js`, the only external bundle) | 2.4 KB |
-| Inline component scripts — nav, project sheets, back-to-top, a11y rail | 3.3 KB |
+| Inline component scripts — nav, project sheets, back-to-top, a11y rail | 3.5 KB |
 | Vercel Analytics + Speed Insights | 5.2 KB |
 
 Measured from `dist/index.html` after `pnpm build`.
