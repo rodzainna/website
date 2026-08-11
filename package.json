@@ -9,6 +9,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check --minimumFailingSeverity hint",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
     "astro": "astro"
   },
   "engines": {
@@ -30,6 +32,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/vite": "^4.3.3",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3"
