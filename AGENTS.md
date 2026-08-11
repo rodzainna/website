@@ -5,6 +5,11 @@ Personal portfolio at [rodzainna.com](https://rodzainna.com). Astro 7, static ou
 integration installed. Interactivity is plain `<script>` plus platform APIs
 (`<dialog>`, `localStorage`). Keep it that way unless there's a concrete reason not to.
 
+**[SPEC.md](./SPEC.md) is the source of truth** for constraints, performance budgets,
+interaction invariants and how to verify them. Read it before changing scroll locking,
+text scaling, or anything that adds JavaScript. The summary below is a shortcut, not a
+replacement — if the two disagree, SPEC.md wins and this file needs updating.
+
 ## Development
 
 Start the dev server in background mode:
@@ -30,8 +35,19 @@ authoritative.
   there rather than a new one-off class string.
 - **Projects** are an MDX content collection in `src/content/projects/`.
   Behaviour is driven by frontmatter (`status`, `coverFit`), never by project id.
+- **Repeated markup gets a component**, repeated content gets a constant. Nav
+  links come from `NAV_LINKS` in `consts.ts` and are mapped over in both the
+  desktop bar and the mobile menu.
 - **Indexing is blocked** while the site is in progress: `SITE_NOINDEX` in
   `src/consts.ts` *and* `public/robots.txt`. Both must change to launch.
+- **Layout changes are verified by measurement in a browser**, at a real
+  viewport, measuring the quantity the user sees — not the one that's easiest
+  to reach. See SPEC.md § Verification.
+
+## CI
+
+`pnpm check` and `pnpm build` run on every pull request. `pnpm check` fails on
+hints as well as errors, so deprecations get fixed while they're one-liners.
 
 ## Documentation
 
