@@ -3,6 +3,14 @@ const year = new Date().getFullYear();
 import { SITE_TITLE } from '@/consts';
 ---
 
-<footer class="container-page py-7 text-center md:px-14">
+<footer
+  class="container-page flex flex-col items-center justify-center gap-2 py-7 text-center sm:flex-row sm:gap-4 md:px-14"
+>
   <p class="font-mono text-xs text-muted-foreground uppercase">© {year} {SITE_TITLE}</p>
+  <a
+    href="/privacy"
+    class="font-mono text-xs text-muted-foreground uppercase transition-colors hover:text-cyan"
+  >
+    Privacy
+  </a>
 </footer>
