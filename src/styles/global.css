@@ -9,7 +9,7 @@
   margin-inline: auto;
   width: 100%;
   max-width: 1120px;
-  padding-inline: 1.875rem; /* 30px on mobile; override with md:px-14 to match desktop gutter */
+  padding-inline: 1.25rem; /* 20px on mobile; override with md:px-14 to match desktop gutter */
 }
 
 /* The small mono label above a heading, and the project kickers. Compose with
