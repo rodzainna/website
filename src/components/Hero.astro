@@ -31,15 +31,11 @@ const lines: TerminalLine[] = [
         products, and multilingual WordPress platforms for UAE government and US/UAE commercial
         clients.
       </p>
+      {/* No résumé download. The PDF carried contact details and sat in git
+          history, which would have published them permanently the moment the
+          repo went public — see SPEC.md § Résumé. */}
       <div class="flex flex-wrap gap-3">
         <Button href="#projects">View projects</Button>
-        <Button
-          variant="secondary"
-          href="/resume-rodzainna-hamisain-senior-fullstack-developer.pdf"
-          download
-        >
-          Download resume
-        </Button>
       </div>
     </div>
     <Terminal lines={lines} class="mx-auto w-full md:max-w-sm" />

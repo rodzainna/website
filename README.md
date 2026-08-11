@@ -42,7 +42,7 @@ pnpm dev          # http://localhost:4321
 | `pnpm test` | Playwright, against the built output |
 | `pnpm test:ui` | Playwright in watch/inspect mode |
 
-CI runs `pnpm check`, `pnpm build` and `pnpm test` on every pull request.
+CI runs `pnpm check` and `pnpm test` on every pull request.
 
 > **First run:** `pnpm exec playwright install chromium`.
 

@@ -52,9 +52,14 @@ every project image broken, which looks like a code bug and isn't — `node -e
 
 ## CI and tests
 
-`pnpm check`, `pnpm build` and `pnpm test` run on every pull request.
-`pnpm check` fails on hints as well as errors, so deprecations get fixed while
-they're one-liners.
+`pnpm check` and `pnpm test` run on **pull requests only** — private repo,
+metered minutes. Playwright's `webServer` builds before serving, so there's no
+separate build step; a broken build still fails the test job. `pnpm check` fails
+on hints as well as errors, so deprecations get fixed while they're one-liners.
+
+**Never commit a résumé PDF.** `public/resume*.pdf` is gitignored and
+`tests/no-resume.spec.ts` guards it. See SPEC.md § Résumé for why history, not
+just the working tree, is the thing that matters.
 
 Tests are Playwright in `tests/`, run against the built output at desktop and
 mobile viewports. Before changing scroll locking, text scaling, the nav or the

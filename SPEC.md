@@ -111,6 +111,33 @@ schema in `src/content.config.ts`. The build fails on invalid frontmatter.
 the badge, `coverFit` picks the image fit, `draft` excludes it, `date` sorts the
 grid. No component may branch on a filename or slug.
 
+## Résumé
+
+**No résumé PDF is committed, and no page links to one.** `public/resume*.pdf`
+is gitignored, and `tests/no-resume.spec.ts` fails on a résumé link, a
+`download` attribute, or anything served at the old path.
+
+The reason is git history rather than the file itself. The PDF entered at the
+first real commit and carried contact details. On a public repo, deleting it
+later would not have helped — any older commit still contains it, and forks and
+archives keep their own copies. It was purged from history with `git
+filter-repo` and force-pushed; the repo was private throughout, so nothing was
+ever published.
+
+Two things that purge does **not** cover, and that matter before going public:
+
+- **GitHub keeps unreachable objects** until its own garbage collection runs.
+  Until then a blob can still be fetched by its exact SHA. Ask GitHub Support to
+  run `gc` on the repository if that window matters.
+- **Vercel keeps previous deployments**, each on its own URL, built from the
+  pre-purge tree. Those still serve the old file. Delete the old deployments, or
+  enable deployment protection, before flipping visibility.
+
+To offer a résumé again, host it outside the repo and link out, or commit a
+version carrying only an email address — never a phone number or street address,
+since anything in `public/` is world-readable from the deployed site regardless
+of repository visibility.
+
 ## Interaction invariants
 
 ### Scroll lock
@@ -163,8 +190,12 @@ rail) and the reader (the no-flash loader in `BaseLayout`), so a hand-edited
 
 ## Verification
 
-CI runs `pnpm check` (fails on hints, not just errors), `pnpm build` and
-`pnpm test` on every pull request.
+CI runs `pnpm check` (fails on hints, not just errors) and `pnpm test` on every
+pull request — **pull requests only**, since this is a private repo with metered
+Actions minutes and running on pushes to main meant every merge re-ran the
+checks the PR had just passed. There is no separate `pnpm build` step either:
+Playwright's `webServer` builds before it serves, so a standalone build compiled
+the site twice per run. A broken build still fails the test job.
 
 Tests are Playwright, in `tests/`, against the **built** output rather than the
 dev server — the dev server can serve stale CSS, and `dist/` is what ships. Two
@@ -182,6 +213,8 @@ Every invariant on this page has a spec:
 | `hover-states.spec.ts` | Every control resolves to teal on hover, in both themes |
 | `footer.spec.ts` | Social hrefs, `rel=noopener`, accessible names, footer on every page |
 | `schema.spec.ts` | `toJsonLd` escaping, `Person` shape, noindex switch, 404 canonical |
+| `availability-pill.spec.ts` | Text-only pill, teal border and text, rendered in both menus |
+| `no-resume.spec.ts` | No résumé link, asset or `download` attribute in the build |
 
 ### Rules these tests encode
 
