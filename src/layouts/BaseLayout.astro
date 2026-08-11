@@ -12,13 +12,21 @@ import {
   FONT_SCALE_MAX,
 } from '@/consts';
 import { buildPersonSchema, toJsonLd } from '@/lib/schema';
+import Analytics from '@vercel/analytics/astro';
+import SpeedInsights from '@vercel/speed-insights/astro';
 
 type Props = {
   title?: string;
   description?: string;
+  /** Error pages aren't real destinations, so they get no canonical URL. */
+  canonical?: boolean;
 };
 
-const { title = SITE_DEFAULT_TITLE, description = SITE_DESCRIPTION } = Astro.props;
+const {
+  title = SITE_DEFAULT_TITLE,
+  description = SITE_DESCRIPTION,
+  canonical: includeCanonical = true,
+} = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL(SITE_OG_IMAGE, Astro.site);
@@ -34,7 +42,7 @@ const personSchema = buildPersonSchema({ url: Astro.site?.href, image: ogImage.h
 
 		<title>{title}</title>
 		<meta name="description" content={description} />
-		<link rel="canonical" href={canonical} />
+		{includeCanonical && <link rel="canonical" href={canonical} />}
 		<meta name="author" content={SITE_TITLE} />
 
 		{/* Blocked while in progress — see SITE_NOINDEX in consts.ts and public/robots.txt. */}
@@ -95,5 +103,7 @@ const personSchema = buildPersonSchema({ url: Astro.site?.href, image: ogImage.h
 			Skip to content
 		</a>
 		<slot />
+		<Analytics />
+		<SpeedInsights />
 	</body>
 </html>

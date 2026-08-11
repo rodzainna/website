@@ -4,7 +4,13 @@ import { SITE_TITLE } from '@/consts';
 
 <header class="sticky top-0 z-40 border-b border-border bg-background py-5">
   <div class="container-page flex items-center gap-4 md:gap-8 md:px-14">
-    <span class="mr-auto font-display text-lg font-bold">{SITE_TITLE}</span>
+    <a
+      href="/"
+      aria-current={Astro.url.pathname === '/' ? 'page' : undefined}
+      class="mr-auto font-display text-lg font-bold transition-colors hover:text-cyan"
+    >
+      {SITE_TITLE}
+    </a>
 
     <nav class="hidden items-center gap-8 md:flex">
       <a href="/#projects" class="text-sm font-medium text-foreground transition-colors hover:text-cyan">Projects</a>
