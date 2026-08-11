@@ -1,0 +1,47 @@
+---
+import { SITE_TITLE } from '@/consts';
+import Button from '@/components/Button.astro';
+import Terminal, { type TerminalLine } from '@/components/Terminal.astro';
+
+const lines: TerminalLine[] = [
+  { prompt: '$ whoami', output: 'rodzainna-hamisain' },
+  { prompt: '$ role --current', output: 'Senior Full-Stack Developer' },
+  { prompt: '$ stack', output: 'React, Vue.js, TypeScript, Python, PHP' },
+  { prompt: '$ status', output: '✓ available — full-time, remote' },
+];
+---
+
+<section class="pt-16 pb-8">
+  <div
+    class="container-page grid grid-cols-1 items-center gap-12 md:grid-cols-[1.2fr_0.8fr] md:px-14"
+  >
+    <div>
+      <p class="mb-4 font-mono text-xs font-semibold tracking-wider text-muted-foreground">
+        // SENIOR FULL-STACK DEVELOPER
+      </p>
+      <h1
+        class="mb-4 font-display text-3xl leading-none font-bold tracking-normal md:text-4xl md:whitespace-nowrap lg:text-5xl"
+      >
+        {SITE_TITLE}
+      </h1>
+      <p class="mb-7 max-w-[50ch] text-base leading-relaxed text-muted-foreground">
+        10 years of experience building production web applications and SaaS products,
+        specializing in React, Vue.js, TypeScript, and modern UI systems, with full-stack
+        experience in Python and PHP. I've delivered enterprise dashboards, Slack-integrated SaaS
+        products, and multilingual WordPress platforms for UAE government and US/UAE commercial
+        clients.
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <Button href="#projects">View projects</Button>
+        <Button
+          variant="secondary"
+          href="/resume-rodzainna-hamisain-senior-fullstack-developer.pdf"
+          download
+        >
+          Download resume
+        </Button>
+      </div>
+    </div>
+    <Terminal lines={lines} class="mx-auto w-full md:max-w-sm" />
+  </div>
+</section>

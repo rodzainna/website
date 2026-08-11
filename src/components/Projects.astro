@@ -1,0 +1,58 @@
+---
+import { getCollection, render } from 'astro:content';
+import ProjectCard from '@/components/ProjectCard.astro';
+import ProjectSheet from '@/components/ProjectSheet.astro';
+
+const allProjects = await getCollection('projects', ({ data }) => !data.draft);
+const projects = allProjects.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const rendered = await Promise.all(
+  projects.map(async (project) => {
+    const { Content } = await render(project);
+    return { project, Content, sheetId: `sheet-${project.id}` };
+  })
+);
+---
+
+<section id="projects" class="border-b border-border py-16">
+  <div class="container-page md:px-14">
+    <h2 class="mb-2 font-display text-3xl font-bold">Projects</h2>
+    <p class="mb-8 text-base text-muted-foreground">A few things I've built and shipped.</p>
+
+    {/* gap-px over a bg-border container draws every divider — no per-cell math. */}
+    <div
+      class="grid grid-cols-1 gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-2 md:grid-cols-3"
+    >
+      {rendered.map(({ project, sheetId }) => <ProjectCard project={project} sheetId={sheetId} />)}
+    </div>
+  </div>
+
+  {
+    rendered.map(({ project, Content, sheetId }) => (
+      <ProjectSheet project={project} sheetId={sheetId}>
+        <Content />
+      </ProjectSheet>
+    ))
+  }
+</section>
+
+<script>
+  // One listener set for every sheet on the page.
+  document.querySelectorAll<HTMLElement>('[data-sheet-open]').forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      const id = trigger.dataset.sheetOpen;
+      if (!id) return;
+      const sheet = document.getElementById(id);
+      if (sheet instanceof HTMLDialogElement) sheet.showModal();
+    });
+  });
+
+  document.querySelectorAll<HTMLDialogElement>('dialog.project-sheet').forEach((sheet) => {
+    // The dialog element only receives the click when it lands on the backdrop.
+    sheet.addEventListener('click', (event) => {
+      if (event.target === sheet) sheet.close();
+    });
+
+    sheet.querySelector('[data-sheet-close]')?.addEventListener('click', () => sheet.close());
+  });
+</script>

@@ -1,0 +1,27 @@
+---
+title: Timetracker
+kicker: PERSONAL PROJECT
+description: Multi-tenant workforce management — time tracking, attendance, scheduling, and payroll, usable entirely in-app, in Slack, or in MS Teams against one shared REST API.
+tags: [React, TypeScript, FastAPI, PostgreSQL, GraphQL, Slack API]
+cover: ./timetracker-icon.png
+coverFit: contain
+status: In development
+date: 2026-07-01
+draft: true
+---
+
+Time tracking, attendance, scheduling, PTO across multiple countries, project management, and payroll — with every core action (clock in, clock out, break, switch task) working three ways: in-app, Slack, and MS Teams, all against the same REST API. An organization can use the product fully without ever connecting a chat tool.
+
+Currently in active development — auth, tenancy, and the core time-tracking loop are built; the rest is in progress.
+
+## Architecture
+
+- **Backend:** FastAPI + SQLAlchemy 2.0 (async) + Alembic, managed with `uv`. Routers stay thin and delegate to a service layer with no HTTP awareness; a service layer raising an HTTP exception is treated as a bug.
+- **Frontend:** React SPA on Vite, React Router in library mode, TanStack Query for server state, React Hook Form + Zod for forms, and a shared `shadcn/ui` design-system package with Tailwind v4 tokens.
+- **Multi-tenancy:** every tenant-scoped query goes through a tenant-scoped repository, backed by Postgres Row-Level Security — a missed filter returns zero rows instead of another company's data. Every tenant-scoped endpoint ships with a cross-tenant test proving one workspace can't reach another's resources.
+- **Testing:** unit tests with no I/O, integration tests against real Postgres (SQLite is disallowed — it doesn't reproduce RLS, JSONB, or transaction semantics), component tests with Vitest + Testing Library, and end-to-end coverage with Playwright.
+- **Auth:** the access token lives in a module-scoped JS variable, never localStorage or a readable cookie; the refresh token is `httpOnly`, with rotation and reuse detection so a compromised refresh token revokes the whole session family.
+
+## Why it's built this way
+
+The domain rules are detailed and often non-obvious — for example, auto clock-out is based on cumulative active time rather than wall-clock time, and PTO approvers are chosen from a list rather than auto-routed. Keeping the service layer free of HTTP and SQL concerns, and requiring a cross-tenant test on every new endpoint, is what makes those rules safe to change without quietly breaking tenant isolation.

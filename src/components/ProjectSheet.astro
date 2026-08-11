@@ -1,0 +1,98 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import Tag from '@/components/Tag.astro';
+import { tagVariants } from '@/lib/variants';
+
+type Props = {
+  project: CollectionEntry<'projects'>;
+  sheetId: string;
+};
+
+const { project, sheetId } = Astro.props;
+const { title, kicker, description, tags, cover, coverFit, link, repo } = project.data;
+
+const coverClass = coverFit === 'contain' ? 'object-contain p-6' : 'object-cover object-top';
+const titleId = `${sheetId}-title`;
+---
+
+{/* Native <dialog>: focus trap, Esc, inert background and top layer come free. */}
+<dialog id={sheetId} class="project-sheet" aria-labelledby={titleId}>
+  <div class="flex h-full flex-col overflow-y-auto bg-background">
+    <div class="relative flex flex-col gap-3 border-b border-border px-6 py-6">
+      <button
+        type="button"
+        class="absolute top-5 right-5 flex size-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+        aria-label="Close"
+        data-sheet-close
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M18 6 6 18"></path>
+          <path d="m6 6 12 12"></path>
+        </svg>
+      </button>
+
+      <p class="font-mono text-xs font-semibold tracking-wider text-cyan">{kicker}</p>
+      <h2 id={titleId} class="pr-10 font-display text-2xl font-bold">{title}</h2>
+
+      {
+        cover && (
+          <div class="aspect-video w-full overflow-hidden rounded-lg border border-border bg-muted">
+            <Image
+              src={cover}
+              alt={`${title} screenshot`}
+              class:list={['h-full w-full', coverClass]}
+            />
+          </div>
+        )
+      }
+
+      <p class="text-base leading-relaxed text-muted-foreground">{description}</p>
+
+      <div class="flex flex-wrap gap-2">
+        {tags.map((tag: string) => <Tag>{tag}</Tag>)}
+      </div>
+
+      {
+        (link || repo) && (
+          <div class="flex flex-wrap gap-2 pt-1">
+            {link && (
+              <a
+                href={link}
+                target="_blank"
+                rel="noopener noreferrer"
+                class={tagVariants({ size: 'lg', interactive: true })}
+              >
+                Live site →
+              </a>
+            )}
+            {repo && (
+              <a
+                href={repo}
+                target="_blank"
+                rel="noopener noreferrer"
+                class={tagVariants({ size: 'lg', interactive: true })}
+              >
+                Repo →
+              </a>
+            )}
+          </div>
+        )
+      }
+    </div>
+
+    <div class="project-sheet-prose px-6 py-6">
+      <slot />
+    </div>
+  </div>
+</dialog>
