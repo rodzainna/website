@@ -46,6 +46,12 @@ const rendered = await Promise.all(
     if (!(sheet instanceof HTMLDialogElement)) return;
 
     trigger.addEventListener('click', () => {
+      // Measured per open, not once at load: the width changes with browser
+      // zoom, and is 0 whenever the scrollbar is an overlay. global.css reads
+      // this back to replace the space `overflow: hidden` is about to reclaim.
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      document.documentElement.style.setProperty('--scrollbar-width', `${scrollbarWidth}px`);
+
       sheet.showModal();
       trigger.setAttribute('aria-expanded', 'true');
     });

@@ -160,13 +160,18 @@ const icon = {
     motionButton?.setAttribute('aria-pressed', String(active));
   }
 
+  /** Percentage of the browser's default size, so a user's own font-size
+      preference is scaled rather than overwritten. Kept in sync with the
+      no-flash loader in BaseLayout, which reads the same key back. */
   function getFontScale() {
-    return parseFloat(root.style.zoom || '1');
+    return parseFloat(root.style.fontSize || '100') / 100;
   }
 
   function setFontScale(scale: number) {
-    const clamped = Math.min(FONT_SCALE_MAX, Math.max(FONT_SCALE_MIN, scale));
-    root.style.zoom = String(clamped);
+    // Round before clamping so repeated steps can't drift (1.1000000000000001).
+    const rounded = Math.round(scale * 100) / 100;
+    const clamped = Math.min(FONT_SCALE_MAX, Math.max(FONT_SCALE_MIN, rounded));
+    root.style.fontSize = `${clamped * 100}%`;
     localStorage.setItem(FONT_KEY, String(clamped));
   }
 
@@ -195,7 +200,7 @@ const icon = {
 
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     root.classList.toggle('dark', prefersDark);
-    root.style.zoom = '1';
+    root.style.fontSize = '';
     root.classList.remove('reduce-motion');
 
     syncThemeLabel();

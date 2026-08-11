@@ -9,7 +9,7 @@
   margin-inline: auto;
   width: 100%;
   max-width: 1120px;
-  padding-inline: 1.875rem; /* 30px on mobile; override with md:px-14 to match desktop gutter */
+  padding-inline: 1.25rem; /* 20px on mobile; override with md:px-14 to match desktop gutter */
 }
 
 /* The small mono label above a heading, and the project kickers. Compose with
@@ -186,9 +186,31 @@
   }
 }
 
-/* Stop the page behind the sheet from scrolling. */
+/* Stop the page behind the sheet from scrolling.
+
+   `overflow: hidden` removes the classic scrollbar, which would let the page
+   widen by its width and slide every centred element sideways. Padding the
+   root by that width puts the space back, so the content box never changes.
+
+   `scrollbar-gutter: stable` is the tidier-looking way to do this, but it
+   reserves the gutter *inside* the initial containing block: a fixed element
+   is then laid out against 1425px on a 1440px viewport, so the sheet stops
+   15px short of the edge and leaves a strip beside it. Padding leaves the
+   containing block at the full viewport width, so the sheet still reaches the
+   edge. `100vw` shrinks along with the gutter too — `window.innerWidth` is the
+   only measurement that survives it, hence the JS-set custom property.
+
+   The rails are pinned to the viewport, not to the padded content box, so they
+   need the same compensation or they slide with it. Defaults to 0px, which is
+   the right answer for overlay scrollbars (mobile, tablet, macOS trackpad):
+   nothing is taken away, so nothing needs replacing. */
 html:has(.project-sheet[open]) {
   overflow: hidden;
+  padding-right: var(--scrollbar-width, 0px);
+}
+
+html:has(.project-sheet[open]) :is(#a11y-rail, #back-to-top-rail) {
+  margin-right: var(--scrollbar-width, 0px);
 }
 
 /* Long-form body copy on standalone pages (privacy, and anything like it). */
