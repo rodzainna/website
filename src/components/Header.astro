@@ -69,7 +69,23 @@ import { SITE_TITLE } from '@/consts';
 
 <script>
   const details = document.getElementById('mobile-nav');
-  details?.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => details.removeAttribute('open'));
-  });
+
+  if (details) {
+    const close = (refocus = false) => {
+      details.removeAttribute('open');
+      if (refocus) details.querySelector('summary')?.focus();
+    };
+
+    details.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => close()));
+
+    // A menu should be dismissible without picking one of its items.
+    document.addEventListener('click', (event) => {
+      if (!details.hasAttribute('open')) return;
+      if (!details.contains(event.target as Node)) close();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && details.hasAttribute('open')) close(true);
+    });
+  }
 </script>
