@@ -25,9 +25,9 @@ export const SITE_OG_IMAGE = '/og-image.png';
 export const SITE_THEME_COLOR = '#155E63';
 
 /**
- * Search engines are blocked site-wide while the site is in progress — this
- * flag drives the robots meta tag, and `public/robots.txt` disallows all.
- * Flip both together when launching.
+ * Search engines are blocked site-wide, permanently — not a pre-launch state.
+ * This flag drives the robots meta tag; `public/robots.txt` disallows all.
+ * The two belong together. See SPEC.md § Search indexing before changing either.
  */
 export const SITE_NOINDEX = true;
 

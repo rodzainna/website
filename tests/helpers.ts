@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test';
+import { expect, type Page, type Locator } from '@playwright/test';
 
 /** Right edge of an element, or null when it isn't in the layout. */
 export async function rightEdge(page: Page, selector: string) {
@@ -25,14 +25,51 @@ export async function scrollbarWidth(page: Page) {
   return page.evaluate(() => window.innerWidth - document.documentElement.clientWidth);
 }
 
+/**
+ * Waits for an element to stop moving, by sampling its box until two reads
+ * agree. Used instead of sleeping through the sheet's 0.3s slide-in: a fixed
+ * wait is either too short (flaky) or too long (slow), and it silently stops
+ * being correct the moment the transition duration changes in global.css.
+ */
+export async function waitUntilStill(locator: Locator) {
+  let previous: string | null = null;
+  await expect
+    .poll(
+      async () => {
+        const box = await locator.boundingBox();
+        const current = box ? `${box.x.toFixed(2)}x${box.y.toFixed(2)}` : null;
+        const settled = current !== null && current === previous;
+        previous = current;
+        return settled;
+      },
+      { timeout: 5000, intervals: [50] }
+    )
+    .toBe(true);
+}
+
 /** Opens the first project sheet through its real trigger, not showModal(). */
 export async function openFirstSheet(page: Page) {
   await page.locator('[data-sheet-open]').first().click();
   const sheet = page.locator('dialog.project-sheet[open]');
   await sheet.waitFor({ state: 'visible' });
-  // The slide-in is a 0.3s transition; measurements must wait it out.
-  await page.waitForTimeout(400);
+  await waitUntilStill(sheet);
   return sheet;
+}
+
+/** Waits for scrolling to come to rest rather than guessing at a duration. */
+export async function waitForScrollToStop(page: Page) {
+  let previous: number | null = null;
+  await expect
+    .poll(
+      async () => {
+        const y = await page.evaluate(() => window.scrollY);
+        const settled = y === previous;
+        previous = y;
+        return settled;
+      },
+      { timeout: 5000, intervals: [50] }
+    )
+    .toBe(true);
 }
 
 /** sRGB relative luminance, per WCAG 2.1. */

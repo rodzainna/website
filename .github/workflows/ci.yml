@@ -42,9 +42,15 @@ jobs:
       # reproduce on your own machine.
       - run: pnpm check
 
-      # Browsers are ~130 MB and change only with the Playwright version, so
-      # key the cache on the resolved lockfile entry rather than re-downloading
-      # on every run.
+      # Browsers are ~130 MB and change only with the Playwright version.
+      #
+      # This misses on the first run of every new branch, and always will:
+      # Actions caches are scoped to the branch that wrote them plus the default
+      # branch, and this workflow is `pull_request`-only, so nothing ever writes
+      # a cache on main to inherit from. It pays off on the second and later
+      # pushes to the same PR, which is where the repeated runs actually happen.
+      # Running on pushes to main too would seed it — at the cost of a whole
+      # extra run per merge, which is the thing that trim removed.
       - name: Resolve Playwright version
         id: pw
         run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"

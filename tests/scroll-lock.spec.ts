@@ -1,5 +1,12 @@
 import { test, expect } from '@playwright/test';
-import { openFirstSheet, rightEdge, leftEdge, scrollbarWidth } from './helpers';
+import {
+  openFirstSheet,
+  rightEdge,
+  leftEdge,
+  scrollbarWidth,
+  waitUntilStill,
+  waitForScrollToStop,
+} from './helpers';
 
 /**
  * Two invariants must hold at once, and fixing one while breaking the other
@@ -26,7 +33,8 @@ test.describe('scroll lock', () => {
     expect(await leftEdge(page, 'h1')).toBe(closed.h1);
 
     await sheet.press('Escape');
-    await page.waitForTimeout(400);
+    await expect(page.locator('dialog.project-sheet[open]')).toHaveCount(0);
+    await waitUntilStill(page.locator('header'));
 
     expect(await rightEdge(page, 'header')).toBe(closed.header);
     expect(await leftEdge(page, 'h1')).toBe(closed.h1);
@@ -51,7 +59,8 @@ test.describe('scroll lock', () => {
     await page.goto('/');
     // Scroll so back-to-top is rendered in place before it's measured.
     await page.evaluate(() => window.scrollTo(0, 800));
-    await page.waitForTimeout(100);
+    await waitForScrollToStop(page);
+    await waitUntilStill(page.locator('#back-to-top-rail'));
 
     const closed = {
       rail: await rightEdge(page, '#a11y-rail'),
@@ -133,17 +142,42 @@ test.describe('scroll lock', () => {
     const before = await page.evaluate(() => window.scrollY);
 
     const box = (await sheet.boundingBox())!;
-    // Over the backdrop where one is exposed, otherwise over the panel. The
-    // page must hold still either way.
-    const x = box.x > 20 ? box.x / 2 : box.width / 2;
+
+    /* Only meaningful where backdrop is exposed. Below the panel's 36rem cap
+       the sheet fills the viewport, so a wheel lands on the sheet's own
+       scroller and the page holds still whether or not the lock works — this
+       assertion passed against a deliberately broken lock on mobile before the
+       skip was added. The mechanism itself is covered on both projects by the
+       computed-overflow test below. */
+    test.skip(box.x <= 20, 'panel fills the viewport — no background to wheel over');
+
+    const x = box.x / 2;
 
     // Must be real input. `overflow: hidden` blocks user scrolling but not
     // programmatic scrollTo, so asserting against scrollTo would fail against
     // a perfectly correct implementation.
     await page.mouse.move(x, 400);
     await page.mouse.wheel(0, 600);
-    await page.waitForTimeout(150);
+    await waitForScrollToStop(page);
 
     expect(await page.evaluate(() => window.scrollY)).toBe(before);
+  });
+
+  test('the root is locked while open and released on close', async ({ page }) => {
+    // Runs on both projects. The wheel test above can only reach the background
+    // where backdrop is exposed, so on mobile this is the assertion that would
+    // actually fail if the lock were removed.
+    await page.goto('/');
+    const overflow = () =>
+      page.evaluate(() => getComputedStyle(document.documentElement).overflow);
+
+    expect(await overflow()).not.toBe('hidden');
+
+    const sheet = await openFirstSheet(page);
+    expect(await overflow()).toBe('hidden');
+
+    await sheet.press('Escape');
+    await expect(page.locator('dialog.project-sheet[open]')).toHaveCount(0);
+    expect(await overflow()).not.toBe('hidden');
   });
 });

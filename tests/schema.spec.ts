@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { buildPersonSchema, toJsonLd } from '../src/lib/schema';
+import { buildPersonSchema, toJsonLd } from '@/lib/schema';
 
 /**
  * Pure functions, no browser needed. `toJsonLd` is the security-relevant one:
@@ -48,14 +48,21 @@ test.describe('rendered document', () => {
     expect(parsed['@type']).toBe('Person');
   });
 
-  test('is noindex while the launch switch is on', async ({ page }) => {
+  test('stays noindex — a permanent decision, not a pre-launch state', async ({ page }) => {
     await page.goto('/');
-    // Guards the pair in SPEC.md § Launch checklist: this and robots.txt must
-    // flip together. If this ever fails, check robots.txt was flipped too.
+    // SPEC.md § Search indexing. Paired with robots.txt; if this fails, the
+    // change needs to be deliberate rather than a passing edit.
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
       'content',
       'noindex, nofollow'
     );
+  });
+
+  test('robots.txt still disallows everything', async ({ page }) => {
+    // The meta tag alone isn't the policy — both halves have to hold.
+    const res = await page.request.get('/robots.txt');
+    expect(res.status()).toBe(200);
+    expect(await res.text()).toMatch(/Disallow:\s*\/\s*$/m);
   });
 
   test('the 404 page emits no canonical URL', async ({ page }) => {

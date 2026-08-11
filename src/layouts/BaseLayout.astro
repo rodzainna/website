@@ -45,7 +45,7 @@ const personSchema = buildPersonSchema({ url: Astro.site?.href, image: ogImage.h
 		{includeCanonical && <link rel="canonical" href={canonical} />}
 		<meta name="author" content={SITE_TITLE} />
 
-		{/* Blocked while in progress — see SITE_NOINDEX in consts.ts and public/robots.txt. */}
+		{/* Permanently blocked by design — see SPEC.md § Search indexing. */}
 		<meta name="robots" content={SITE_NOINDEX ? 'noindex, nofollow' : 'index, follow'} />
 
 		{/* Open Graph — drives the LinkedIn / Slack / iMessage link preview. */}

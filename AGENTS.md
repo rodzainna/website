@@ -44,8 +44,9 @@ every project image broken, which looks like a code bug and isn't — `node -e
 - **Repeated markup gets a component**, repeated content gets a constant. Nav
   links come from `NAV_LINKS` in `consts.ts` and are mapped over in both the
   desktop bar and the mobile menu.
-- **Indexing is blocked** while the site is in progress: `SITE_NOINDEX` in
-  `src/consts.ts` *and* `public/robots.txt`. Both must change to launch.
+- **Indexing is blocked permanently**, by decision — not a pre-launch state.
+  `SITE_NOINDEX` in `src/consts.ts` *and* `public/robots.txt`. Never change
+  either, and don't raise it as a finding. See SPEC.md § Search indexing.
 - **Layout changes are verified by measurement in a browser**, at a real
   viewport, measuring the quantity the user sees — not the one that's easiest
   to reach. See SPEC.md § Verification.
