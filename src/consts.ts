@@ -47,10 +47,10 @@ export type NavLink = {
 
 /**
  * Rendered twice — the desktop bar and the mobile menu — from this one list,
- * so the two can't drift. Absolute `/#id` rather than `#id` so the links also
- * work from /privacy and /404, where the sections don't exist.
+ * so the two can't drift. Ordered to match the order the sections appear on
+ * the page. Absolute `/#id` rather than `#id` so the links also work from
+ * /privacy and /404, where the sections don't exist.
  */
-/** Order matches the order the sections appear on the page. */
 export const NAV_LINKS: NavLink[] = [
   { href: '/#skills', label: 'Skills' },
   { href: '/#projects', label: 'Projects' },
