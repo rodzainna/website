@@ -1,9 +1,9 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
 /**
- * Shared style definitions for elements that appear in both `.astro` and
- * `.tsx` components. Importing the same `cva` from both sides is what keeps
- * the Astro markup and the React islands from drifting apart.
+ * Shared style definitions for elements that repeat across components.
+ * Defining each treatment once here is what stops the same button or pill
+ * from being re-typed as a slightly different class string per component.
  */
 
 export const buttonVariants = cva(
