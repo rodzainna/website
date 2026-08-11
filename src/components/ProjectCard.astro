@@ -69,5 +69,7 @@ const coverClass = coverFit === 'contain' ? 'object-contain p-6' : 'object-cover
     class="absolute inset-0 z-0 transition-colors hover:bg-muted"
     aria-label={`View ${title} details`}
     aria-haspopup="dialog"
+    aria-expanded="false"
+    aria-controls={sheetId}
     data-sheet-open={sheetId}></button>
 </article>
