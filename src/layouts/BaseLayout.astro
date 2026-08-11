@@ -12,6 +12,8 @@ import {
   FONT_SCALE_MAX,
 } from '@/consts';
 import { buildPersonSchema, toJsonLd } from '@/lib/schema';
+import Analytics from '@vercel/analytics/astro';
+import SpeedInsights from '@vercel/speed-insights/astro';
 
 type Props = {
   title?: string;
@@ -95,5 +97,7 @@ const personSchema = buildPersonSchema({ url: Astro.site?.href, image: ogImage.h
 			Skip to content
 		</a>
 		<slot />
+		<Analytics />
+		<SpeedInsights />
 	</body>
 </html>

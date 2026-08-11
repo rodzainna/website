@@ -12,6 +12,16 @@
   padding-inline: 1.875rem; /* 30px on mobile; override with md:px-14 to match desktop gutter */
 }
 
+/* The small mono label above a heading, and the project kickers. Compose with
+   a colour utility (and `uppercase` where the source text isn't already). */
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: var(--tw-leading, var(--text-xs--line-height));
+  font-weight: 600;
+  letter-spacing: var(--tracking-wider);
+}
+
 @theme {
   --font-display: 'Inter Variable', sans-serif;
   --font-sans: 'Inter Variable', sans-serif;

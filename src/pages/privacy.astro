@@ -22,7 +22,7 @@ const formattedDate = LAST_UPDATED.toLocaleDateString('en-GB', {
   <div class="w-full overflow-x-hidden">
     <main id="main" tabindex="-1" class="py-10 md:py-16">
       <div class="container-page md:px-14">
-        <p class="mb-4 font-mono text-xs font-semibold tracking-wider text-muted-foreground">
+        <p class="mb-4 eyebrow text-muted-foreground">
           // PRIVACY
         </p>
         <h1 class="mb-4 font-display text-3xl leading-none font-bold md:text-4xl">
@@ -35,7 +35,8 @@ const formattedDate = LAST_UPDATED.toLocaleDateString('en-GB', {
         <div class="page-prose max-w-[68ch]">
           <p>
             This is a personal portfolio site. It has no accounts, no sign-up, no comments and no
-            forms. Nothing you do here is sent to me, and nothing about you is sold or shared.
+            forms. It collects anonymous, aggregate usage statistics — described below — and
+            nothing about you is ever sold or shared.
           </p>
 
           <h2>What is stored on your device</h2>
@@ -56,11 +57,29 @@ const formattedDate = LAST_UPDATED.toLocaleDateString('en-GB', {
             never touch those controls, nothing is stored at all.
           </p>
 
-          <h2>Analytics and tracking</h2>
+          <h2>Analytics</h2>
           <p>
-            There are none. No analytics, no tracking pixels, no advertising, no embedded
-            third-party scripts, and no fingerprinting. The site loads no resources from any
-            other domain — every font, image and script is served from this one.
+            The site uses Vercel Web Analytics and Vercel Speed Insights. Both are cookieless —
+            they set no cookies and store nothing on your device.
+          </p>
+          <ul>
+            <li>
+              <strong>Web Analytics</strong> records aggregate page views: which page was
+              visited, the referring site, and coarse details such as country, device type and
+              browser.
+            </li>
+            <li>
+              <strong>Speed Insights</strong> records performance measurements, like how quickly
+              pages render, so I can tell whether the site is slow for real visitors.
+            </li>
+          </ul>
+          <p>
+            Neither builds a profile of you, follows you to other sites, or keeps a persistent
+            identifier. What I see is totals and trends, never individual visitors. The data is
+            processed by Vercel and handled under their privacy policy.
+          </p>
+          <p>
+            Beyond those two, there is no advertising, no tracking pixels, and no fingerprinting.
           </p>
 
           <h2>Hosting and server logs</h2>
