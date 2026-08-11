@@ -14,10 +14,10 @@ export const buttonVariants = cva(
         /** The one primary CTA treatment, on any surface. */
         primary: 'bg-cyan text-white hover:bg-cyan-hover dark:text-surface-on-dark',
         secondary:
-          'border border-border bg-background text-foreground hover:border-foreground',
+          'border border-border bg-background text-foreground hover:border-cyan hover:text-cyan',
         /** For the always-dark surfaces, where theme-aware tokens can't reach. */
         'secondary-on-dark':
-          'border border-border-on-dark text-foreground-on-dark hover:border-foreground-on-dark',
+          'border border-border-on-dark text-foreground-on-dark hover:border-cyan-on-dark hover:text-cyan-on-dark',
       },
     },
     defaultVariants: { variant: 'primary' },
@@ -39,7 +39,7 @@ export const tagVariants = cva(
         lg: 'px-4 py-2 font-medium',
       },
       interactive: {
-        true: 'transition-colors hover:border-foreground',
+        true: 'transition-colors hover:border-cyan hover:text-cyan',
         false: '',
       },
     },
