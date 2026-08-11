@@ -6,6 +6,7 @@ import { SITE_TITLE } from '@/consts';
   <div class="container-page flex items-center gap-4 md:gap-8 md:px-14">
     <a
       href="/"
+      aria-current={Astro.url.pathname === '/' ? 'page' : undefined}
       class="mr-auto font-display text-lg font-bold transition-colors hover:text-cyan"
     >
       {SITE_TITLE}
