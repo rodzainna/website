@@ -1,19 +1,22 @@
 ---
+import type { HTMLAttributes } from 'astro/types';
 import { cn } from '@/lib/utils';
 
-type Props = {
-  /** Callers supply the display mode — `hidden md:flex` or `mt-1 flex`. */
-  class?: string;
-};
+type Props = HTMLAttributes<'span'>;
 
-const { class: className } = Astro.props;
+const { class: className, ...rest } = Astro.props;
 ---
 
+{/* `inline-flex` is a default, not a fixture: callers pass their own display
+    (`hidden md:flex`, `mt-1 flex`) and twMerge drops this one. Without it a
+    caller that passes no display gets an inert `items-center` and a
+    misaligned status dot. */}
 <span
   class={cn(
-    'items-center gap-2 rounded-lg border border-border px-3 py-1.5 font-mono text-xs font-medium text-cyan',
+    'inline-flex items-center gap-2 rounded-lg border border-border px-3 py-1.5 font-mono text-xs font-medium text-cyan',
     className
   )}
+  {...rest}
 >
   <span class="inline-block size-2 rounded-full bg-success"></span>
   AVAILABLE
