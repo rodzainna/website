@@ -13,11 +13,10 @@ const { class: className, ...rest } = Astro.props;
     misaligned status dot. */}
 <span
   class={cn(
-    'inline-flex items-center gap-2 rounded-lg border border-border px-3 py-1.5 font-mono text-xs font-medium text-cyan',
+    'inline-flex items-center rounded-lg border border-cyan px-3 py-1.5 font-mono text-xs font-medium text-cyan',
     className
   )}
   {...rest}
 >
-  <span class="inline-block size-2 rounded-full bg-success"></span>
   AVAILABLE
 </span>
