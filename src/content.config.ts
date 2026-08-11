@@ -9,8 +9,8 @@ const projects = defineCollection({
       kicker: z.string(),
       description: z.string(),
       tags: z.array(z.string()).default([]),
-      link: z.string().url().optional(),
-      repo: z.string().url().optional(),
+      link: z.url().optional(),
+      repo: z.url().optional(),
       cover: image().optional(),
       /** 'contain' for logo-style covers that shouldn't be cropped. */
       coverFit: z.enum(['cover', 'contain']).default('cover'),

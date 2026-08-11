@@ -8,9 +8,8 @@ import {
   SITE_OG_IMAGE,
   SITE_THEME_COLOR,
   SITE_NOINDEX,
-  SKILL_GROUPS,
-  SOCIALS,
 } from '@/consts';
+import { buildPersonSchema, toJsonLd } from '@/lib/schema';
 
 type Props = {
   title?: string;
@@ -22,18 +21,7 @@ const { title = SITE_DEFAULT_TITLE, description = SITE_DESCRIPTION } = Astro.pro
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL(SITE_OG_IMAGE, Astro.site);
 
-const personSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'Person',
-  name: SITE_TITLE,
-  jobTitle: SITE_TAGLINE,
-  description: SITE_DESCRIPTION,
-  url: Astro.site?.href,
-  image: ogImage.href,
-  email: `mailto:${SOCIALS.email}`,
-  sameAs: [SOCIALS.github, SOCIALS.linkedin],
-  knowsAbout: SKILL_GROUPS.flatMap((group) => group.items),
-};
+const personSchema = buildPersonSchema({ url: Astro.site?.href, image: ogImage.href });
 ---
 
 <html lang="en">
@@ -76,7 +64,7 @@ const personSchema = {
 
 		<script
 			type="application/ld+json"
-			set:html={JSON.stringify(personSchema)}
+			set:html={toJsonLd(personSchema)}
 			is:inline
 		/>
 
