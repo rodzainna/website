@@ -195,11 +195,20 @@ but not programmatic `scrollTo`, so scroll-lock is asserted with
 `mouse.wheel()`. Asserting against `scrollTo` would fail a correct
 implementation.
 
-**Skip loudly rather than pass vacuously.** The compensation test asserts an
-exact scrollbar width, which only exists with classic scrollbars. macOS follows
-the system overlay-scrollbar setting and no Chromium flag overrides it, so that
-spec **skips locally on macOS and runs on Linux CI**. A green local run is not
-evidence that branch was exercised — check the CI run.
+**A permanent skip is a deleted test.** The compensation assertion needs a
+classic scrollbar. macOS follows the system overlay-scrollbar setting and no
+Chromium flag overrides it — and `ubuntu-latest` reports `0` as well, checked
+against a real CI run rather than assumed. So a spec that waits for a genuine
+classic scrollbar never executes anywhere, and skipping is only a tidier way of
+not testing.
+
+It is split instead: one spec asserts the measurement (`--scrollbar-width`
+equals `innerWidth - clientWidth`, which holds at `0` too), and one forces the
+value to `15px` and asserts what the stylesheet does with it. Verified to fail
+by reverting the implementation to `scrollbar-gutter: stable` — four specs go
+red with the 1440-versus-1425 signature, on macOS, where the real scrollbar is
+zero. Do that whenever a test's failure mode isn't obvious; a test never seen
+red is a guess.
 
 ## Launch checklist
 

@@ -26,6 +26,12 @@ wrong, restart the server and hard-reload before debugging the code. `astro dev 
 can also lose track of a running process — `lsof -nP -iTCP:4321 -sTCP:LISTEN` is
 authoritative.
 
+**Always restart after installing or removing a dependency.** pnpm rewrites the
+paths under `node_modules/.pnpm`, and a server started before that keeps stale
+module resolution. It presents as `/_image` returning 500 with `MissingSharp` and
+every project image broken, which looks like a code bug and isn't — `node -e
+"require('sharp')"` will succeed the whole time.
+
 ## Conventions
 
 - **Styles** live in `src/styles/global.css`. Colours come from CSS custom

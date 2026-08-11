@@ -44,9 +44,12 @@ pnpm dev          # http://localhost:4321
 
 CI runs `pnpm check`, `pnpm build` and `pnpm test` on every pull request.
 
-> **First run:** `pnpm exec playwright install chromium`. One scroll-lock spec
-> skips on macOS — see [Verification](./SPEC.md#verification) for why that's
-> expected and where it does run.
+> **First run:** `pnpm exec playwright install chromium`.
+
+> **After changing dependencies, restart the dev server.** pnpm rewrites the
+> paths under `node_modules/.pnpm`, and a server started beforehand keeps stale
+> module resolution — which surfaces as `/_image` returning 500 with
+> `MissingSharp` and every project image failing to render.
 
 > **Dev server gotcha:** it can serve stale CSS after new Tailwind classes are
 > added, and stale images when a file is replaced at an unchanged path. If
