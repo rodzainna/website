@@ -1,0 +1,106 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import AccessibilityRail from '@/components/AccessibilityRail.astro';
+import { SITE_TITLE, SOCIALS } from '@/consts';
+
+/** Update whenever the substance of this policy changes. */
+const LAST_UPDATED = new Date('2026-08-11');
+const formattedDate = LAST_UPDATED.toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<BaseLayout
+  title={`Privacy — ${SITE_TITLE}`}
+  description="What this site stores, what it doesn't, and how to get in touch."
+>
+  <Header />
+  <div class="w-full overflow-x-hidden">
+    <main id="main" tabindex="-1" class="py-16">
+      <div class="container-page md:px-14">
+        <p class="mb-4 font-mono text-xs font-semibold tracking-wider text-muted-foreground">
+          // PRIVACY
+        </p>
+        <h1 class="mb-4 font-display text-3xl leading-none font-bold md:text-4xl">
+          Privacy policy
+        </h1>
+        <p class="mb-10 font-mono text-xs text-muted-foreground uppercase">
+          Last updated {formattedDate}
+        </p>
+
+        <div class="page-prose max-w-[68ch]">
+          <p>
+            This is a personal portfolio site. It has no accounts, no sign-up, no comments and no
+            forms. Nothing you do here is sent to me, and nothing about you is sold or shared.
+          </p>
+
+          <h2>What is stored on your device</h2>
+          <p>
+            The site uses no cookies at all. It stores three values in your browser's
+            <code>localStorage</code>, and only once you change one of the accessibility settings
+            in the side rail:
+          </p>
+          <ul>
+            <li><code>theme</code> — whether you chose light or dark mode.</li>
+            <li><code>a11y-font-scale</code> — your chosen text size.</li>
+            <li><code>a11y-reduce-motion</code> — whether you asked for reduced motion.</li>
+          </ul>
+          <p>
+            These stay on your device, are never transmitted anywhere, and exist only so the site
+            looks the way you left it next time. You can clear them at any time with the reset
+            button in the accessibility rail, or by clearing site data in your browser. If you
+            never touch those controls, nothing is stored at all.
+          </p>
+
+          <h2>Analytics and tracking</h2>
+          <p>
+            There are none. No analytics, no tracking pixels, no advertising, no embedded
+            third-party scripts, and no fingerprinting. The site loads no resources from any
+            other domain — every font, image and script is served from this one.
+          </p>
+
+          <h2>Hosting and server logs</h2>
+          <p>
+            The site is hosted on <a href="https://vercel.com" target="_blank" rel="noopener noreferrer">Vercel</a>,
+            which — like any web host — automatically records standard request information such as
+            IP address, browser user agent, requested page and timestamp. This happens at the
+            infrastructure level, is used for delivering the site and protecting it from abuse, and
+            I do not use it to build any profile of visitors. Vercel's handling of that data is
+            covered by their own privacy policy.
+          </p>
+
+          <h2>If you email me</h2>
+          <p>
+            The contact button opens your own email client — it does not submit anything through
+            this site. If you do get in touch, I keep your message and address only for as long as
+            it takes to correspond with you about it, and I won't add you to any mailing list.
+          </p>
+
+          <h2>Links to other sites</h2>
+          <p>
+            This site links out to places like LinkedIn and GitHub, and to some of the projects
+            described here. Once you follow one of those links you're on someone else's site,
+            under their privacy policy rather than this one.
+          </p>
+
+          <h2>Changes</h2>
+          <p>
+            If this policy changes in substance, the date at the top of the page changes with it.
+          </p>
+
+          <h2>Getting in touch</h2>
+          <p>
+            Questions about any of the above, or want something removed? Email
+            <a href={`mailto:${SOCIALS.email}`}>{SOCIALS.email}</a>.
+          </p>
+        </div>
+      </div>
+    </main>
+    <Footer />
+  </div>
+  <AccessibilityRail />
+</BaseLayout>
