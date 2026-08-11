@@ -8,6 +8,8 @@ import {
   SITE_OG_IMAGE,
   SITE_THEME_COLOR,
   SITE_NOINDEX,
+  FONT_SCALE_MIN,
+  FONT_SCALE_MAX,
 } from '@/consts';
 import { buildPersonSchema, toJsonLd } from '@/lib/schema';
 
@@ -68,7 +70,7 @@ const personSchema = buildPersonSchema({ url: Astro.site?.href, image: ogImage.h
 			is:inline
 		/>
 
-		<script is:inline>
+		<script is:inline define:vars={{ FONT_SCALE_MIN, FONT_SCALE_MAX }}>
 			(function () {
 				var root = document.documentElement;
 
@@ -77,7 +79,8 @@ const personSchema = buildPersonSchema({ url: Astro.site?.href, image: ogImage.h
 				root.classList.toggle('dark', storedTheme ? storedTheme === 'dark' : prefersDark);
 
 				var scale = parseFloat(localStorage.getItem('a11y-font-scale') || '1');
-				root.style.zoom = scale;
+				if (!isFinite(scale)) scale = 1;
+				root.style.zoom = Math.min(FONT_SCALE_MAX, Math.max(FONT_SCALE_MIN, scale));
 
 				var reduceMotion = localStorage.getItem('a11y-reduce-motion') === 'true';
 				root.classList.toggle('reduce-motion', reduceMotion);

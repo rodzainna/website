@@ -14,7 +14,8 @@ import AccessibilityRail from '@/components/AccessibilityRail.astro';
 <BaseLayout>
 	<Header />
 	<div class="w-full overflow-x-hidden">
-		<main id="main">
+		{/* tabindex="-1" so the skip link actually moves focus here, not just scroll */}
+		<main id="main" tabindex="-1">
 			<Hero />
 			<Skills />
 			<Projects />

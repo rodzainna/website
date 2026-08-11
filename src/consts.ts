@@ -31,6 +31,15 @@ export const SITE_THEME_COLOR = '#155E63';
  */
 export const SITE_NOINDEX = true;
 
+/**
+ * Bounds for the accessibility text-scaling control. Read by both the rail
+ * (which writes the value) and the no-flash loader in BaseLayout (which reads
+ * it back), so a persisted value can't escape the range the UI allows.
+ */
+export const FONT_SCALE_MIN = 0.85;
+export const FONT_SCALE_MAX = 1.4;
+export const FONT_SCALE_STEP = 0.1;
+
 export const SOCIALS = {
   github: 'https://github.com/rodzainna',
   linkedin: 'https://www.linkedin.com/in/rodzainnahamisain',

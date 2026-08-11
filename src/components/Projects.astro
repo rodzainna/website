@@ -44,12 +44,14 @@ const rendered = await Promise.all(
     const sheet = document.getElementById(id);
     if (!(sheet instanceof HTMLDialogElement)) return;
 
-    trigger.addEventListener('click', () => sheet.showModal());
+    trigger.addEventListener('click', () => {
+      sheet.showModal();
+      trigger.setAttribute('aria-expanded', 'true');
+    });
 
     // `close` fires however the dialog was dismissed — button, backdrop or Esc —
     // so the trigger's state stays accurate without duplicating it per path.
     sheet.addEventListener('close', () => trigger.setAttribute('aria-expanded', 'false'));
-    trigger.addEventListener('click', () => trigger.setAttribute('aria-expanded', 'true'));
   });
 
   document.querySelectorAll<HTMLDialogElement>('dialog.project-sheet').forEach((sheet) => {

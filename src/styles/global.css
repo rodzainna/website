@@ -110,6 +110,12 @@
     outline: 2px solid var(--ring);
     outline-offset: 2px;
   }
+  /* Skip-link targets take focus programmatically but aren't interactive and
+     aren't in the tab order — a ring here would frame the whole page. The
+     next Tab lands on a real control, which still shows one. */
+  [tabindex='-1']:focus-visible {
+    outline: none;
+  }
   body {
     @apply bg-background text-foreground;
   }

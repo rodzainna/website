@@ -91,13 +91,12 @@ const icon = {
 </div>
 
 <script>
+  import { FONT_SCALE_MIN, FONT_SCALE_MAX, FONT_SCALE_STEP } from '@/consts';
+
   const root = document.documentElement;
   const THEME_KEY = 'theme';
   const FONT_KEY = 'a11y-font-scale';
   const MOTION_KEY = 'a11y-reduce-motion';
-  const MIN_SCALE = 0.85;
-  const MAX_SCALE = 1.4;
-  const STEP = 0.1;
 
   const toggleButton = document.getElementById('a11y-toggle');
   const panel = document.getElementById('a11y-panel');
@@ -146,7 +145,7 @@ const icon = {
   }
 
   function setFontScale(scale: number) {
-    const clamped = Math.min(MAX_SCALE, Math.max(MIN_SCALE, scale));
+    const clamped = Math.min(FONT_SCALE_MAX, Math.max(FONT_SCALE_MIN, scale));
     root.style.zoom = String(clamped);
     localStorage.setItem(FONT_KEY, String(clamped));
   }
@@ -160,8 +159,8 @@ const icon = {
     syncThemeLabel();
   });
 
-  incButton?.addEventListener('click', () => setFontScale(getFontScale() + STEP));
-  decButton?.addEventListener('click', () => setFontScale(getFontScale() - STEP));
+  incButton?.addEventListener('click', () => setFontScale(getFontScale() + FONT_SCALE_STEP));
+  decButton?.addEventListener('click', () => setFontScale(getFontScale() - FONT_SCALE_STEP));
 
   motionButton?.addEventListener('click', () => {
     const active = root.classList.toggle('reduce-motion');
