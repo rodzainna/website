@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# The repo default is already read-only, but that's a repo setting an org
+# policy can flip. Pinning it here keeps least privilege in the file.
+permissions:
+  contents: read
+
+# A new push to a PR makes the in-flight run obsolete — don't pay for it.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: check & build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Reads the version from package.json's `packageManager` field, so CI
+      # and local development can't drift onto different pnpm majors.
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      # Fails if pnpm-lock.yaml is out of date rather than quietly resolving
+      # something new — a lockfile that only works locally is a broken build.
+      - run: pnpm install --frozen-lockfile
+
+      # `pnpm check` carries --minimumFailingSeverity hint, so this fails on
+      # deprecation hints too, while they are still one-line fixes. Same script
+      # as local development runs — CI shouldn't enforce a bar you can't
+      # reproduce on your own machine.
+      - run: pnpm check
+
+      - run: pnpm build
