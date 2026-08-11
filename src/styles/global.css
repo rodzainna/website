@@ -12,6 +12,16 @@
   padding-inline: 1.875rem; /* 30px on mobile; override with md:px-14 to match desktop gutter */
 }
 
+/* The small mono label above a heading, and the project kickers. Compose with
+   a colour utility (and `uppercase` where the source text isn't already). */
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: var(--text-xs--line-height);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wider);
+}
+
 @theme {
   --font-display: 'Inter Variable', sans-serif;
   --font-sans: 'Inter Variable', sans-serif;
@@ -179,6 +189,29 @@
 /* Stop the page behind the sheet from scrolling. */
 html:has(.project-sheet[open]) {
   overflow: hidden;
+}
+
+/* Long-form body copy on standalone pages (privacy, and anything like it). */
+.page-prose {
+  @apply text-base leading-relaxed text-muted-foreground;
+}
+.page-prose :is(h2) {
+  @apply mt-9 mb-3 font-display text-xl font-bold text-foreground;
+}
+.page-prose :is(p) {
+  @apply mb-4;
+}
+.page-prose :is(ul) {
+  @apply mb-4 space-y-1;
+}
+.page-prose :is(li) {
+  @apply ml-5 list-disc;
+}
+.page-prose :is(a) {
+  @apply text-cyan underline underline-offset-4;
+}
+.page-prose :is(code) {
+  @apply rounded-md bg-muted px-1.5 py-0.5 font-mono text-sm text-foreground;
 }
 
 /* Prose rendered from each project's MDX body. */

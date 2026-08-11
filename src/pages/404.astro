@@ -16,13 +16,14 @@ const lines: TerminalLine[] = [
 <BaseLayout
   title={`Page not found — ${SITE_TITLE}`}
   description="The page you're looking for doesn't exist."
+  canonical={false}
 >
   <Header />
   <div class="w-full overflow-x-hidden">
     {/* tabindex="-1" so the skip link actually moves focus here, not just scroll */}
-    <main id="main" tabindex="-1" class="flex min-h-[70vh] items-center py-16">
+    <main id="main" tabindex="-1" class="flex min-h-[70vh] items-center py-10 md:py-16">
       <div class="container-page md:px-14">
-        <p class="mb-4 font-mono text-xs font-semibold tracking-wider text-muted-foreground">
+        <p class="mb-4 eyebrow text-muted-foreground">
           // ERROR 404
         </p>
         <h1 class="mb-4 font-display text-3xl leading-none font-bold md:text-4xl lg:text-5xl">
