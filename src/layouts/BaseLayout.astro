@@ -86,9 +86,13 @@ const personSchema = buildPersonSchema({ url: Astro.site?.href, image: ogImage.h
 				var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 				root.classList.toggle('dark', storedTheme ? storedTheme === 'dark' : prefersDark);
 
+				/* Scales the root font-size, not `zoom`: every text and spacing
+				   utility here is rem-based, so this is a real font-size change
+				   rather than a paint-time visual scale that iOS Safari ignores. */
 				var scale = parseFloat(localStorage.getItem('a11y-font-scale') || '1');
 				if (!isFinite(scale)) scale = 1;
-				root.style.zoom = Math.min(FONT_SCALE_MAX, Math.max(FONT_SCALE_MIN, scale));
+				scale = Math.min(FONT_SCALE_MAX, Math.max(FONT_SCALE_MIN, scale));
+				if (scale !== 1) root.style.fontSize = scale * 100 + '%';
 
 				var reduceMotion = localStorage.getItem('a11y-reduce-motion') === 'true';
 				root.classList.toggle('reduce-motion', reduceMotion);
