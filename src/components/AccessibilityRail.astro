@@ -16,6 +16,7 @@ const icon = {
 ---
 
 <div
+  id="a11y-rail"
   class="fixed right-4 bottom-20 z-30 flex flex-col-reverse items-end gap-2 sm:right-6 sm:top-1/2 sm:bottom-auto sm:flex-col sm:-translate-y-1/2"
 >
   <button
@@ -112,11 +113,30 @@ const icon = {
     );
   }
 
-  toggleButton?.addEventListener('click', () => {
-    const isOpen = panel?.dataset.open === 'true';
-    panel?.setAttribute('data-open', String(!isOpen));
-    toggleButton.setAttribute('aria-expanded', String(!isOpen));
-    syncToggleIcon(!isOpen);
+  const rail = document.getElementById('a11y-rail');
+
+  function setPanelOpen(isOpen: boolean) {
+    panel?.setAttribute('data-open', String(isOpen));
+    toggleButton?.setAttribute('aria-expanded', String(isOpen));
+    syncToggleIcon(isOpen);
+  }
+
+  toggleButton?.addEventListener('click', () =>
+    setPanelOpen(panel?.dataset.open !== 'true')
+  );
+
+  // The panel is a mobile-only popup (CSS forces it open from `sm` up), so it
+  // should be dismissible the same way any popup is.
+  document.addEventListener('click', (event) => {
+    if (panel?.dataset.open !== 'true') return;
+    if (!rail?.contains(event.target as Node)) setPanelOpen(false);
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && panel?.dataset.open === 'true') {
+      setPanelOpen(false);
+      toggleButton?.focus();
+    }
   });
 
   const themeButton = document.getElementById('a11y-theme');
