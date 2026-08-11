@@ -131,6 +131,10 @@
   }
   html {
     @apply font-sans;
+    /* Keep the scrollbar's gutter reserved at all times. Locking scroll for an
+       open project sheet sets overflow:hidden, which would otherwise remove the
+       scrollbar and let the page widen by its width — a visible sideways jump. */
+    scrollbar-gutter: stable;
   }
   button:not(:disabled) {
     @apply cursor-pointer;
