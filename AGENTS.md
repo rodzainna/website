@@ -44,10 +44,17 @@ authoritative.
   viewport, measuring the quantity the user sees — not the one that's easiest
   to reach. See SPEC.md § Verification.
 
-## CI
+## CI and tests
 
-`pnpm check` and `pnpm build` run on every pull request. `pnpm check` fails on
-hints as well as errors, so deprecations get fixed while they're one-liners.
+`pnpm check`, `pnpm build` and `pnpm test` run on every pull request.
+`pnpm check` fails on hints as well as errors, so deprecations get fixed while
+they're one-liners.
+
+Tests are Playwright in `tests/`, run against the built output at desktop and
+mobile viewports. Before changing scroll locking, text scaling, the nav or the
+colour tokens, read SPEC.md § Verification — it records the specific mistakes
+these specs exist to prevent (asserting on painted rather than computed values,
+bypassing the real trigger, and passing vacuously when a scrollbar is overlay).
 
 ## Documentation
 

@@ -39,8 +39,14 @@ pnpm dev          # http://localhost:4321
 | `pnpm build` | Build to `dist/` |
 | `pnpm preview` | Serve the built output |
 | `pnpm check` | `astro check` — fails on errors, warnings *and* hints |
+| `pnpm test` | Playwright, against the built output |
+| `pnpm test:ui` | Playwright in watch/inspect mode |
 
-CI runs `pnpm check` and `pnpm build` on every pull request.
+CI runs `pnpm check`, `pnpm build` and `pnpm test` on every pull request.
+
+> **First run:** `pnpm exec playwright install chromium`. One scroll-lock spec
+> skips on macOS — see [Verification](./SPEC.md#verification) for why that's
+> expected and where it does run.
 
 > **Dev server gotcha:** it can serve stale CSS after new Tailwind classes are
 > added, and stale images when a file is replaced at an unchanged path. If
@@ -60,6 +66,8 @@ src/
 ├─ pages/             index, privacy, 404
 ├─ styles/global.css  Tokens, base layer, utilities, dialog styles
 └─ consts.ts          Site metadata, nav, skills, experience
+
+tests/                Playwright specs + shared helpers
 ```
 
 ## Adding a project
