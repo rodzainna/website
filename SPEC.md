@@ -89,6 +89,14 @@ and tag variants (CVA); `.eyebrow`, `.page-prose` and `.container-page` are
 utilities in `global.css`. Components compose them rather than repeating class
 strings.
 
+**Every interactive control hovers to the teal accent** — `--cyan`, or
+`--cyan-on-dark` on the always-dark surfaces. Never to `--foreground`: that
+reads as black in light mode and white in dark, and it used to leave buttons
+disagreeing with links, which already hovered to teal. Enforced by
+`tests/hover-states.spec.ts`, which asserts the *resolved* colour rather than
+the class string, and separately fails on any `hover:*-foreground` still in the
+markup.
+
 **Repeated markup gets a component.** The nav links live in `NAV_LINKS` in
 `consts.ts` and are mapped over in both the desktop bar and the mobile menu; the
 availability pill is one component used twice. Two copies of the same markup in
@@ -171,6 +179,8 @@ Every invariant on this page has a spec:
 | `dialog.spec.ts` | Open, Esc, backdrop, close button, `aria-expanded`, labelling, focus containment and restoration |
 | `nav.spec.ts` | Both menus agree, targets exist, links absolute, mobile open/dismiss/Escape |
 | `contrast.spec.ts` | Every token pairing in the table above, both themes, plus a check on the ratio maths itself |
+| `hover-states.spec.ts` | Every control resolves to teal on hover, in both themes |
+| `footer.spec.ts` | Social hrefs, `rel=noopener`, accessible names, footer on every page |
 | `schema.spec.ts` | `toJsonLd` escaping, `Person` shape, noindex switch, 404 canonical |
 
 ### Rules these tests encode

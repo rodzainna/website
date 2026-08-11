@@ -14,6 +14,9 @@ const PAIRS = [
   ['--muted-foreground', '--background'],
   ['--cyan', '--background'],
   ['--muted-foreground', '--muted'],
+  /* Hover states put teal on the muted surface — the sheet's close button and
+     the mobile nav links both do this. */
+  ['--cyan', '--muted'],
   ['--primary-foreground', '--primary'],
   ['--foreground-on-dark', '--surface-on-dark'],
   ['--muted-foreground-on-dark', '--surface-on-dark'],
