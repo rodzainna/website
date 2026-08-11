@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   check:
-    name: check & build
+    name: check, build & test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -42,3 +42,19 @@ jobs:
       - run: pnpm check
 
       - run: pnpm build
+
+      # `channel: chromium` in playwright.config.ts needs the full browser, not
+      # the default headless shell — the shell always draws overlay scrollbars,
+      # which would make the scroll-lock assertions pass vacuously.
+      - run: pnpm exec playwright install --with-deps chromium
+
+      # Playwright's webServer rebuilds and serves dist/ on its own port.
+      - run: pnpm test
+
+      # The HTML report is the only way to see a trace after the fact.
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
