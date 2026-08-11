@@ -50,9 +50,10 @@ export type NavLink = {
  * so the two can't drift. Absolute `/#id` rather than `#id` so the links also
  * work from /privacy and /404, where the sections don't exist.
  */
+/** Order matches the order the sections appear on the page. */
 export const NAV_LINKS: NavLink[] = [
-  { href: '/#projects', label: 'Projects' },
   { href: '/#skills', label: 'Skills' },
+  { href: '/#projects', label: 'Projects' },
   { href: '/#experience', label: 'Experience' },
   { href: '/#contact', label: 'Contact' },
 ];
