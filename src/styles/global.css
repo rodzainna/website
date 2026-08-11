@@ -188,20 +188,29 @@
 
 /* Stop the page behind the sheet from scrolling.
 
-   The gutter is reserved *here* rather than globally. `overflow: hidden`
-   removes the classic scrollbar, which would let the page widen by its width
-   and slide every centred element sideways; reserving the gutter in the same
-   rule puts back exactly the space the scrollbar occupied, so the width never
-   changes. Declaring it on `html` unconditionally would also work, but leaves
-   an empty strip down the right edge for the whole visit to avoid a shift that
-   only happens while a sheet is open.
+   `overflow: hidden` removes the classic scrollbar, which would let the page
+   widen by its width and slide every centred element sideways. Padding the
+   root by that width puts the space back, so the content box never changes.
 
-   `scrollbar-gutter` applies to classic scrollbars only — with overlay
-   scrollbars (mobile, tablet, macOS on a trackpad) there is no scrollbar
-   taking up space, nothing to replace, and this whole rule is inert. */
+   `scrollbar-gutter: stable` is the tidier-looking way to do this, but it
+   reserves the gutter *inside* the initial containing block: a fixed element
+   is then laid out against 1425px on a 1440px viewport, so the sheet stops
+   15px short of the edge and leaves a strip beside it. Padding leaves the
+   containing block at the full viewport width, so the sheet still reaches the
+   edge. `100vw` shrinks along with the gutter too — `window.innerWidth` is the
+   only measurement that survives it, hence the JS-set custom property.
+
+   The rails are pinned to the viewport, not to the padded content box, so they
+   need the same compensation or they slide with it. Defaults to 0px, which is
+   the right answer for overlay scrollbars (mobile, tablet, macOS trackpad):
+   nothing is taken away, so nothing needs replacing. */
 html:has(.project-sheet[open]) {
   overflow: hidden;
-  scrollbar-gutter: stable;
+  padding-right: var(--scrollbar-width, 0px);
+}
+
+html:has(.project-sheet[open]) :is(#a11y-rail, #back-to-top-rail) {
+  margin-right: var(--scrollbar-width, 0px);
 }
 
 /* Long-form body copy on standalone pages (privacy, and anything like it). */
