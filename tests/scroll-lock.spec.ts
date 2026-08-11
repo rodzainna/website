@@ -64,32 +64,61 @@ test.describe('scroll lock', () => {
     expect(await rightEdge(page, '#back-to-top-rail')).toBe(closed.backToTop);
   });
 
-  test('compensation matches the scrollbar exactly', async ({ page }) => {
+  test('the trigger records the scrollbar width it is compensating for', async ({
+    page,
+  }) => {
     await page.goto('/');
     const width = await scrollbarWidth(page);
 
-    // Overlay scrollbars take no layout width, so there is nothing to replace
-    // and every rule involved is inert. Skipping keeps this honest rather than
-    // passing vacuously — the regression only exists with classic scrollbars.
-    test.skip(
-      width === 0,
-      'overlay scrollbars — no layout width to compensate (macOS and mobile)'
-    );
-
     await openFirstSheet(page);
 
+    // Holds at 0 too: with overlay scrollbars nothing is taken away, so the
+    // correct compensation is 0px and every rule below becomes inert.
     const applied = await page.evaluate(() =>
       document.documentElement.style.getPropertyValue('--scrollbar-width')
     );
     expect(applied).toBe(`${width}px`);
+  });
 
-    // The content box gives up exactly what the scrollbar gave up, while the
-    // containing block stays at full viewport width.
-    const { bodyWidth, innerWidth } = await page.evaluate(() => ({
-      bodyWidth: +document.body.getBoundingClientRect().width.toFixed(2),
-      innerWidth: window.innerWidth,
-    }));
-    expect(bodyWidth).toBe(innerWidth - width);
+  test('a non-zero scrollbar width is compensated exactly', async ({ page }) => {
+    await page.goto('/');
+    const sheet = await openFirstSheet(page);
+
+    /* The width is *forced*, not measured. macOS follows the system
+       overlay-scrollbar setting and no Chromium flag overrides it — and
+       ubuntu-latest on CI reports 0 as well, so a test that waits for a real
+       classic scrollbar never runs anywhere. Forcing the value exercises the
+       CSS contract on every platform instead of skipping forever.
+
+       The measurement half is covered by the test above; this is the half that
+       says what the stylesheet does with it. */
+    const FORCED = 15;
+
+    const railBefore = await rightEdge(page, '#a11y-rail');
+
+    const after = await page.evaluate((w) => {
+      document.documentElement.style.setProperty('--scrollbar-width', `${w}px`);
+      const dialog = document.querySelector('dialog.project-sheet[open]')!;
+      return {
+        bodyWidth: +document.body.getBoundingClientRect().width.toFixed(2),
+        innerWidth: window.innerWidth,
+        dialogRight: +dialog.getBoundingClientRect().right.toFixed(2),
+        railRight: +document
+          .querySelector('#a11y-rail')!
+          .getBoundingClientRect()
+          .right.toFixed(2),
+      };
+    }, FORCED);
+
+    // The content box gives up exactly the scrollbar's width...
+    expect(after.bodyWidth).toBe(after.innerWidth - FORCED);
+    // ...while the containing block stays at full viewport width, which is the
+    // half `scrollbar-gutter: stable` gets wrong.
+    expect(after.dialogRight).toBe(after.innerWidth);
+    // Viewport-pinned rails take the same compensation.
+    expect(after.railRight).toBe(railBefore! - FORCED);
+
+    await sheet.evaluate((d: HTMLDialogElement) => d.close());
   });
 
   test('background cannot be scrolled by the user while a sheet is open', async ({
