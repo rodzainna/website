@@ -60,8 +60,8 @@ export const NAV_LINKS: NavLink[] = [
 
 export const SOCIALS = {
   github: 'https://github.com/rodzainna',
-  linkedin: 'https://www.linkedin.com/in/rodzainnahamisain',
-  email: 'rodzainna.hamisain@gmail.com',
+  linkedin: 'https://www.linkedin.com/in/rodzainna',
+  email: 'rodzainna@gmail.com',
 };
 
 export type SkillGroup = {
@@ -107,7 +107,7 @@ export const SKILL_GROUPS: SkillGroup[] = [
       'Slack API',
       'WordPress',
       'WordPress Multisite',
-      'Localization (EN/AR)',
+      'Localization (EN/AR; RTL/LTR)',
       'SEO',
     ],
   },
@@ -122,7 +122,7 @@ export type ExperienceEntry = {
 
 export const EXPERIENCE: ExperienceEntry[] = [
   {
-    dates: 'Jan 2025 — Jul 2026',
+    dates: 'Aug 2024 — Jul 2026',
     role: 'Senior Full-Stack Developer',
     company: 'VetEngage — Dallas, TX',
     achievements: [
@@ -154,7 +154,7 @@ export const EXPERIENCE: ExperienceEntry[] = [
   },
   {
     dates: 'Jan 2017 — Jun 2021',
-    role: 'WordPress Developer',
+    role: 'Mid-Level Full-Stack WordPress Developer',
     company: 'Mesasix — Dallas, TX',
     achievements: [
       'Contributed to the development and maintenance of WordPress websites for US and UAE commercial, nonprofit, and government clients.',

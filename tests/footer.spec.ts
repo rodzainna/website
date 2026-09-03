@@ -6,7 +6,7 @@ import { test, expect } from '@playwright/test';
  */
 const SOCIALS = [
   { label: 'GitHub', href: 'https://github.com/rodzainna' },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/rodzainnahamisain' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/rodzainna' },
 ];
 
 test.describe('footer', () => {
