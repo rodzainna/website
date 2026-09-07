@@ -128,10 +128,9 @@ export const EXPERIENCE: ExperienceEntry[] = [
     role: 'Senior Full-Stack Developer',
     company: 'VetEngage — Dallas, TX',
     achievements: [
-      'Collaborated on VetEngage, a SaaS platform for veterinary clinics, contributing to its client-facing online booking experience and internal administrative dashboard.',
-      'Developed and maintained responsive frontend features using React, TypeScript, Vite, Tailwind CSS, and shadcn/ui.',
-      'Contributed to the product marketing website and shared design system, helping maintain a consistent user experience across customer-facing and internal applications.',
-      'Contributed to a React frontend monorepo supporting the marketing website, online booking experience, and internal dashboard, while also contributing to a separate Python backend codebase.',
+      'Collaborated on VetEngage, a SaaS platform for veterinary clinics, building responsive client-facing booking flows and administrative dashboards using React, TypeScript, Vite, and Tailwind CSS.',
+      'Maintained a comprehensive React frontend monorepo alongside a secure Python backend architecture.',
+      'Collaborated on a unified design system to keep the experience visually consistent across customer-facing platforms.',
     ],
   },
   {
@@ -139,8 +138,9 @@ export const EXPERIENCE: ExperienceEntry[] = [
     role: 'Full-Stack Developer — Timetracker v2 (Slack-Native SaaS)',
     company: 'Mesasix — Dallas, TX',
     achievements: [
-      "Took ownership of the Vue.js, Tailwind CSS, PHP/Laravel time-tracking rewrite after the original developer's departure, supporting its production rollout and resolving critical subscription, clock-in, and time-calculation issues.",
-      'Optimized slow database queries, maintained Slack slash-command and interactive time-tracking workflows, and handled customer support for the paid product.',
+      "Assumed sole ownership of the Vue.js, Tailwind CSS, PHP/Laravel time-tracking rewrite after the original developer's departure, driving its production rollout.",
+      'Debugged and optimized transactional billing workflows, payment log logic, and slow database queries.',
+      'Handled tier-3 technical customer support for the paid product, engineering patches for critical live issues.',
     ],
   },
   {
@@ -148,10 +148,10 @@ export const EXPERIENCE: ExperienceEntry[] = [
     role: 'Senior Frontend Developer — Luxsurance',
     company: 'Mesasix — Dallas, TX',
     achievements: [
-      'Collaborated on the Vue.js and Tailwind CSS customer application, integrating .NET REST APIs for core insurance workflows.',
-      'Contributed frontend work to the internal administrative dashboard for operations, partners/retailers, and customer management.',
-      'Contributed to the development and maintenance of the Luxsurance WordPress marketing website.',
-      'Worked in an Agile/Scrum environment using Microsoft Teams and Azure DevOps.',
+      'Developed responsive customer UIs with Vue.js and Tailwind CSS, integrating custom .NET REST APIs for core insurance workflows.',
+      'Built dynamic frontend modules for internal operations, retail partner onboarding, and customer management.',
+      'Maintained the corporate WordPress marketing website, ensuring cross-browser performance.',
+      'Delivered features within an Agile/Scrum environment using Microsoft Teams and Azure DevOps.',
     ],
   },
   {
@@ -159,9 +159,9 @@ export const EXPERIENCE: ExperienceEntry[] = [
     role: 'Mid-Level Full-Stack Developer (WordPress & Shopify)',
     company: 'Mesasix — Dallas, TX',
     achievements: [
-      'Contributed to the development and maintenance of WordPress websites for US and UAE commercial, nonprofit, and government clients, and assisted with initial setup, theme configuration, and basic storefront updates on Shopify for clients including Joanna Czech and Dr. Flora Kim.',
+      'Configured, updated, and maintained themes for client Shopify storefronts, including Joanna Czech and Dr. Flora Kim, alongside ongoing WordPress work for US and UAE commercial, nonprofit, and government clients.',
       'Built and supported multilingual WordPress Multisite platforms with English and Arabic localization, including right-to-left (RTL) and left-to-right (LTR) layouts.',
-      "Contributed to large UAE government web platforms, including the Ministry of State for Federal National Council Affairs and the Ministry of Culture and Knowledge Development (MCKD), including MCKD's network of subsites.",
+      "Contributed to large UAE government web platforms, including the Ministry of State for Federal National Council Affairs (MFNCA) and the Ministry of Culture and Knowledge Development (MCKD), including MCKD's network of subsites.",
       'Delivered WordPress sites for clients including twofour54, Jarvis Analytics, Jarvis University, Ears Texas, and We Thrive ABA.',
     ],
   },
@@ -170,7 +170,8 @@ export const EXPERIENCE: ExperienceEntry[] = [
     role: 'Junior Full-Stack Developer',
     company: 'Mesasix — Dallas, TX',
     achievements: [
-      'Contributed to the first version of Mesasix Timetracker, a Slack-native time-tracking application, using Laravel, PHP, jQuery, HTML, and CSS.',
+      'Contributed to the MVP launch of Mesasix Timetracker, a Slack-native time-tracking application, using Laravel, PHP, jQuery, HTML, and CSS.',
+      'Helped build the application core to handle webhook triggers and third-party platform data.',
     ],
   },
 ];
