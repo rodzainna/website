@@ -103,6 +103,7 @@ export const SKILL_GROUPS: SkillGroup[] = [
   {
     label: 'Integrations & CMS',
     items: [
+      'Shopify',
       'Stripe',
       'Slack API',
       'WordPress',
@@ -154,12 +155,12 @@ export const EXPERIENCE: ExperienceEntry[] = [
   },
   {
     dates: 'Jan 2017 — Jun 2021',
-    role: 'Mid-Level Full-Stack WordPress Developer',
+    role: 'Mid-Level Full-Stack Developer (WordPress & Shopify)',
     company: 'Mesasix — Dallas, TX',
     achievements: [
-      'Contributed to the development and maintenance of WordPress websites for US and UAE commercial, nonprofit, and government clients.',
+      'Contributed to the development and maintenance of WordPress websites for US and UAE commercial, nonprofit, and government clients, and assisted with initial setup, theme configuration, and basic storefront updates on Shopify.',
       'Built and supported multilingual WordPress Multisite platforms with English and Arabic localization, including right-to-left (RTL) and left-to-right (LTR) layouts.',
-      "Contributed to large UAE government web platforms, including the Ministry of Foreign Affairs and International Cooperation (MNFCA) and the Ministry of Culture and Knowledge Development (MCKD), including MCKD's network of subsites.",
+      "Contributed to large UAE government web platforms, including the Ministry of State for Federal National Council Affairs and the Ministry of Culture and Knowledge Development (MCKD), including MCKD's network of subsites.",
       'Delivered WordPress sites for clients including twofour54, Jarvis Analytics, Jarvis University, Ears Texas, and We Thrive ABA.',
     ],
   },
