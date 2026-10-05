@@ -1,0 +1,23 @@
+---
+title: ws-chat
+kicker: PERSONAL PROJECT
+description: A real-time, multi-room chat app on raw WebSockets and GraphQL, with roles, @mentions, presence, rate limiting and an admin screen.
+tags: [TypeScript, WebSockets, GraphQL, PostgreSQL, React]
+link: https://chat.rodzainna.com
+cover: ./ws-chat-cover.webp
+date: 2026-09-16
+draft: false
+---
+
+A real-time, multi-room chat app. Messages go over a hand-built **WebSocket** layer, with no Socket.IO; everything else, like history, rooms and admin, goes over **GraphQL**. Data lives in **PostgreSQL** via Prisma.
+
+Try it with `alice` / `testpass123` (user) or `dave` / `testpass123` (admin).
+
+## What I built
+
+- Public and private rooms, an Admin / User / Restricted role model, @mentions, edit and delete, live presence, and unread badges.
+- One access check shared by WebSocket and GraphQL, so private-room rules can't drift between the two.
+- JWTs in httpOnly cookies with rotating refresh tokens. Logout ends only the current browser's session, and a token refresh swaps sockets without dropping the connection.
+- Concurrency handled in the database: row locks keep at least one admin, and advisory locks stop logout and refresh from racing.
+- Token-bucket rate limits on messages, room creation and sign-ups.
+- Unit and integration tests against a real server and Postgres, run in CI on every pull request.
