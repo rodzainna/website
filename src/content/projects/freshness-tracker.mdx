@@ -1,0 +1,22 @@
+---
+title: Freshness Tracker
+kicker: PERSONAL PROJECT
+description: A Shopify app for food stores that tracks stock by batch and expiry date, flags what's expiring, and uses up the oldest stock first when orders ship.
+tags: [Shopify, React Router, TypeScript, GraphQL, Prisma]
+repo: https://github.com/rodzainna/shopify-freshness-app
+cover: ./freshness-tracker-cover.webp
+date: 2026-10-29
+draft: false
+---
+
+A **Shopify** embedded app for stores that sell perishables. Merchants record each batch's quantity and expiry date on the product page, and a dashboard shows what's fresh, expiring soon or expired across the store.
+
+It runs on a development store with 60 demo products; the README has screenshots and a demo GIF.
+
+## What I built
+
+- A product-page panel (Admin UI extension) to add, edit and remove batches, with live status badges and validation.
+- A dashboard with search, filters, sorting and paging over Shopify's **Admin GraphQL API**, including an expiry sort Shopify can't do itself, and a CSV export of every batch.
+- Fulfillment webhooks that use up the batch expiring first, skip expired stock and record any shortfall. The webhook replies at once and a job applies the change under a per-product lock, safe to retry.
+- Batches stored in the merchant's own store as metaobjects; the app's database keeps only what processing needs, such as sessions, locks, jobs and shortfall records.
+- 666 unit and integration tests, and a README that documents its limits.
