@@ -81,7 +81,7 @@ export const SKILL_GROUPS: SkillGroup[] = [
       'HTML5',
       'Tailwind CSS',
       'Vite',
-      'Liquid (Basic)',
+      'Liquid',
       'shadcn/ui',
     ],
   },
