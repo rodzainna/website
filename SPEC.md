@@ -54,19 +54,19 @@ Current cost:
 
 | | |
 | --- | --- |
-| `index.html` raw | 115 KB |
-| `index.html` gzipped | **17 KB** |
-| 17 panels | 37% of the document, ~2.5 KB raw each |
+| `index.html` raw | 120 KB |
+| `index.html` gzipped | **18 KB** |
+| 18 panels | 38% of the document, ~2.6 KB raw each |
 
-The raw number looks alarming and mostly isn't: seventeen near-identical panels
-compress extremely well, which is why 115 KB becomes 17 KB over the wire.
+The raw number looks alarming and mostly isn't: eighteen near-identical panels
+compress extremely well, which is why 120 KB becomes 18 KB over the wire.
 
 **Threshold.** Revisit when the gzipped document passes **30 KB**, or when a
 single project body grows beyond a few paragraphs — long, dissimilar bodies stop
 compressing against each other and the marginal cost climbs. At that point the
 options are lazy-loading panel bodies (costs JavaScript and a loading state) or
 giving projects their own routes (costs the panel interaction). Neither is worth
-it at 17 KB.
+it at 18 KB.
 
 ## Styling
 
