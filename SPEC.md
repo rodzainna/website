@@ -37,6 +37,7 @@ Measured from `dist/index.html` after `pnpm build`, uncompressed:
 | --- | --- |
 | Astro prefetch runtime (the only external bundle) | 2.4 KB |
 | Inline component scripts — nav, project sheets, back-to-top, a11y rail | 3.5 KB |
+| No-flash loader in `BaseLayout` — theme, text size and reduced motion | 0.9 KB |
 | Vercel Analytics + Speed Insights | 5.2 KB |
 
 First-party JavaScript should stay under **10 KB uncompressed**. Anything that
