@@ -21,7 +21,7 @@ Built with [Astro](https://astro.build) as a static site, deployed on Vercel.
 
 **No UI framework.** There are no React/Vue/Svelte islands and no framework
 integration installed — interactivity is plain `<script>` plus platform APIs.
-First-party JavaScript is under 6 KB uncompressed.
+First-party JavaScript is under 7 KB uncompressed.
 
 The constraints behind that, and the rest of the decisions worth knowing, are in
 [SPEC.md](./SPEC.md).
